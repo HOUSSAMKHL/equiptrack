@@ -2,9 +2,32 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class EquipementTracable extends Model
 {
-    //
+    use HasFactory;
+
+    protected $table = 'equipement_tracables';
+
+    protected $fillable = [
+        'statut',
+        'reference',
+        'annee_dacquisition',
+        'valeur_dacquisition',
+        'id_atelier',
+        'id_equipement',
+    ];
+
+    public function atelier()
+    {
+        return $this->belongsTo(Atelier::class, 'id_atelier');
+    }
+
+    public function equipement()
+    {
+        return $this->belongsTo(Equipement::class, 'id_equipement');
+    }
 }
+

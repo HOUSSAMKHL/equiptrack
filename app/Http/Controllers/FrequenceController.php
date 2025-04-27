@@ -7,59 +7,43 @@ use Illuminate\Http\Request;
 
 class FrequenceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function index() {
+        $frequences = Frequence::all();
+        return view('frequence.index', compact('frequences'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function create() {
+        return view('frequence.form');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+        $request->validate([
+            'type_frequence' => 'required|string|max:255',
+        ]);
+
+        Frequence::create($request->all());
+        return redirect()->route('frequence.index')->with('success', 'Fréquence créée avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Frequence $frequence)
-    {
-        //
+    public function show(Frequence $frequence) {
+        return view('frequence.show', compact('frequence'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Frequence $frequence)
-    {
-        //
+    public function edit(Frequence $frequence) {
+        return view('frequence.form', compact('frequence'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Frequence $frequence)
-    {
-        //
+    public function update(Request $request, Frequence $frequence) {
+        $request->validate([
+            'type_frequence' => 'required|string|max:255',
+        ]);
+
+        $frequence->update($request->all());
+        return redirect()->route('frequence.index')->with('success', 'Fréquence mise à jour avec succès.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Frequence $frequence)
-    {
-        //
+    public function destroy(Frequence $frequence) {
+        $frequence->delete();
+        return redirect()->route('frequence.index')->with('success', 'Fréquence supprimée avec succès.');
     }
 }

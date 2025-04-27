@@ -7,59 +7,44 @@ use Illuminate\Http\Request;
 
 class AtelierController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function index() {
+        $ateliers = Atelier::all();
+        return view('atelier.index', compact('ateliers'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function create() {
+        return view('atelier.form');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+        $request->validate([
+            'numero_atelier' => 'required|string|max:255',
+            'id_etablissement' => 'required|exists:etablissements,id',
+        ]);
+
+        Atelier::create($request->all());
+        return redirect()->route('atelier.index')->with('success', 'Atelier créé avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Atelier $atelier)
-    {
-        //
+    public function show(Atelier $atelier) {
+        return view('atelier.show', compact('atelier'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Atelier $atelier)
-    {
-        //
+    public function edit(Atelier $atelier) {
+        return view('atelier.form', compact('atelier'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Atelier $atelier)
-    {
-        //
+    public function update(Request $request, Atelier $atelier) {
+        $request->validate([
+            'numero_atelier' => 'required|string|max:255',
+            'id_etablissement' => 'required|exists:etablissements,id',
+        ]);
+        $atelier->update($request->all());
+        return redirect()->route('atelier.index')->with('success', 'Atelier mis à jour.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Atelier $atelier)
-    {
-        //
+    public function destroy(Atelier $atelier) {
+        $atelier->delete();
+        return redirect()->route('atelier.index')->with('success', 'Atelier supprimé avec succès.');
     }
 }

@@ -7,59 +7,53 @@ use Illuminate\Http\Request;
 
 class EquipementTracableController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function index() {
+        $equipements_tracables = EquipementTracable::all();
+        return view('equipement_tracable.index', compact('equipements_tracables'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function create() {
+        return view('equipement_tracable.form');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+        $request->validate([
+            'statut' => 'required|string|max:255',
+            'reference' => 'required|string|max:255',
+            'annee_dacquisition' => 'required|date_format:Y',
+            'valeur_dacquisition' => 'required|numeric',
+            'id_atelier' => 'required|exists:ateliers,id',
+            'id_equipement' => 'required|exists:equipements,id',
+        ]);
+
+        EquipementTracable::create($request->all());
+        return redirect()->route('equipement_tracable.index')->with('success', 'Équipement tracable créé avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(EquipementTracable $equipementTracable)
-    {
-        //
+    public function show(EquipementTracable $equipementTracable) {
+        return view('equipement_tracable.show', compact('equipementTracable'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(EquipementTracable $equipementTracable)
-    {
-        //
+    public function edit(EquipementTracable $equipementTracable) {
+        return view('equipement_tracable.form', compact('equipementTracable'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, EquipementTracable $equipementTracable)
-    {
-        //
+    public function update(Request $request, EquipementTracable $equipementTracable) {
+        $request->validate([
+            'statut' => 'required|string|max:255',
+            'reference' => 'required|string|max:255',
+            'annee_dacquisition' => 'required|date_format:Y',
+            'valeur_dacquisition' => 'required|numeric',
+            'id_atelier' => 'required|exists:ateliers,id',
+            'id_equipement' => 'required|exists:equipements,id',
+        ]);
+        
+        $equipementTracable->update($request->all());
+        return redirect()->route('equipement_tracable.index')->with('success', 'Équipement tracable mis à jour avec succès.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(EquipementTracable $equipementTracable)
-    {
-        //
+    public function destroy(EquipementTracable $equipementTracable) {
+        $equipementTracable->delete();
+        return redirect()->route('equipement_tracable.index')->with('success', 'Équipement tracable supprimé avec succès.');
     }
 }

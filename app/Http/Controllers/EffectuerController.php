@@ -7,59 +7,50 @@ use Illuminate\Http\Request;
 
 class EffectuerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function index() {
+        $effectuers = Effectuer::all();
+        return view('effectuer.index', compact('effectuers'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function create() {
+        return view('effectuer.form');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+        $request->validate([
+            'id_user' => 'required|exists:users,id',
+            'id_exemplaire' => 'required|exists:exemplaires,id',
+            'id_operation' => 'required|exists:operations,id',
+            'date_operation' => 'required|date',
+            'durée' => 'nullable|date_format:H:i:s',
+        ]);
+
+        Effectuer::create($request->all());
+        return redirect()->route('effectuer.index')->with('success', 'Opération effectuée avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Effectuer $effectuer)
-    {
-        //
+    public function show(Effectuer $effectuer) {
+        return view('effectuer.show', compact('effectuer'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Effectuer $effectuer)
-    {
-        //
+    public function edit(Effectuer $effectuer) {
+        return view('effectuer.form', compact('effectuer'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Effectuer $effectuer)
-    {
-        //
+    public function update(Request $request, Effectuer $effectuer) {
+        $request->validate([
+            'id_user' => 'required|exists:users,id',
+            'id_exemplaire' => 'required|exists:exemplaires,id',
+            'id_operation' => 'required|exists:operations,id',
+            'date_operation' => 'required|date',
+            'durée' => 'nullable|date_format:H:i:s',
+        ]);
+        $effectuer->update($request->all());
+        return redirect()->route('effectuer.index')->with('success', 'Opération mise à jour avec succès.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Effectuer $effectuer)
-    {
-        //
+    public function destroy(Effectuer $effectuer) {
+        $effectuer->delete();
+        return redirect()->route('effectuer.index')->with('success', 'Opération supprimée avec succès.');
     }
 }

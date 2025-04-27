@@ -7,59 +7,43 @@ use Illuminate\Http\Request;
 
 class OperationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function index() {
+        $operations = Operation::all();
+        return view('operation.index', compact('operations'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function create() {
+        return view('operation.form');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+        $request->validate([
+            'nom_operation' => 'required|string|max:255',
+        ]);
+
+        Operation::create($request->all());
+        return redirect()->route('operation.index')->with('success', 'Opération créée avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Operation $operation)
-    {
-        //
+    public function show(Operation $operation) {
+        return view('operation.show', compact('operation'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Operation $operation)
-    {
-        //
+    public function edit(Operation $operation) {
+        return view('operation.form', compact('operation'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Operation $operation)
-    {
-        //
+    public function update(Request $request, Operation $operation) {
+        $request->validate([
+            'nom_operation' => 'required|string|max:255',
+        ]);
+
+        $operation->update($request->all());
+        return redirect()->route('operation.index')->with('success', 'Opération mise à jour avec succès.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Operation $operation)
-    {
-        //
+    public function destroy(Operation $operation) {
+        $operation->delete();
+        return redirect()->route('operation.index')->with('success', 'Opération supprimée avec succès.');
     }
 }

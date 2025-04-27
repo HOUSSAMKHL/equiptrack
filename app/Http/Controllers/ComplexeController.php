@@ -7,59 +7,44 @@ use Illuminate\Http\Request;
 
 class ComplexeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function index() {
+        $complexes = Complexe::all();
+        return view('complexe.index', compact('complexes'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function create() {
+        return view('complexe.form');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+        $request->validate([
+            'nom_complexe' => 'required|string|max:255',
+            'id_DR' => 'required|exists:direction_regionales,id',
+        ]);
+
+        Complexe::create($request->all());
+        return redirect()->route('complexe.index')->with('success', 'Complexe créé avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Complexe $complexe)
-    {
-        //
+    public function show(Complexe $complexe) {
+        return view('complexe.show', compact('complexe'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Complexe $complexe)
-    {
-        //
+    public function edit(Complexe $complexe) {
+        return view('complexe.form', compact('complexe'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Complexe $complexe)
-    {
-        //
+    public function update(Request $request, Complexe $complexe) {
+        $request->validate([
+            'nom_complexe' => 'required|string|max:255',
+            'id_DR' => 'required|exists:direction_regionales,id',
+        ]);
+        $complexe->update($request->all());
+        return redirect()->route('complexe.index')->with('success', 'Complexe mis à jour.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Complexe $complexe)
-    {
-        //
+    public function destroy(Complexe $complexe) {
+        $complexe->delete();
+        return redirect()->route('complexe.index')->with('success', 'Complexe supprimé avec succès.');
     }
 }

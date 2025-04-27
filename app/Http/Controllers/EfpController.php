@@ -7,59 +7,50 @@ use Illuminate\Http\Request;
 
 class EfpController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function index() {
+        $Efps = Efp::all();
+        return view('Efp.index', compact('Efps'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function create() {
+        return view('Efp.form');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+        $request->validate([
+            'nom_etablissement' => 'required|string|max:255',
+            'adresse' => 'required|string|max:255',
+            'numero' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'id_complexe' => 'required|exists:complexes,id',
+        ]);
+
+        Efp::create($request->all());
+        return redirect()->route('Efp.index')->with('success', 'Efp créé avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Efp $efp)
-    {
-        //
+    public function show(Efp $Efp) {
+        return view('Efp.show', compact('Efp'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Efp $efp)
-    {
-        //
+    public function edit(Efp $Efp) {
+        return view('Efp.form', compact('Efp'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Efp $efp)
-    {
-        //
+    public function update(Request $request, Efp $Efp) {
+        $request->validate([
+            'nom_etablissement' => 'required|string|max:255',
+            'adresse' => 'required|string|max:255',
+            'numero' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'id_complexe' => 'required|exists:complexes,id',
+        ]);
+        $Efp->update($request->all());
+        return redirect()->route('Efp.index')->with('success', 'Efp mis à jour avec succès.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Efp $efp)
-    {
-        //
+    public function destroy(Efp $Efp) {
+        $Efp->delete();
+        return redirect()->route('Efp.index')->with('success', 'Efp supprimé avec succès.');
     }
 }

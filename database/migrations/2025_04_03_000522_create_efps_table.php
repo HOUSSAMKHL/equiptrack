@@ -12,9 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('efps', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); 
+            $table->string('nom_etablissement');
+            $table->string('adresse');
+            $table->string('numero');
+            $table->string('email');
+            $table->foreignId('id_complexe')->constrained('complexes');
         });
+        
     }
 
     /**

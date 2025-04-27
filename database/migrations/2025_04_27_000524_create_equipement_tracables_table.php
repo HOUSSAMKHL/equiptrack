@@ -12,9 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('equipement_tracables', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); 
+            $table->string('statut');
+            $table->string('reference');
+            $table->year('annee_dacquisition');
+            $table->float('valeur_dacquisition');
+            $table->foreignId('id_atelier')->constrained('ateliers');
+            $table->foreignId('id_equipement')->constrained('equipement_identifies');
         });
+        
     }
 
     /**

@@ -7,59 +7,52 @@ use Illuminate\Http\Request;
 
 class AnomalieController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function index() {
+        $anomalies = Anomalie::all();
+        return view('anomalie.index', compact('anomalies'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function create() {
+        return view('anomalie.form');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+        $request->validate([
+            'cause_anomalie' => 'required|string',
+            'action_corrective' => 'required|string',
+            'date_signalement' => 'required|date',
+            'duree_panne' => 'required|integer',
+            'cout_reparation' => 'required|numeric',
+            'anomalie_resolue' => 'required|boolean',
+        ]);
+
+        Anomalie::create($request->all());
+        return redirect()->route('anomalie.index')->with('success', 'Anomalie signalée avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Anomalie $anomalie)
-    {
-        //
+    public function show(Anomalie $anomalie) {
+        return view('anomalie.show', compact('anomalie'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Anomalie $anomalie)
-    {
-        //
+    public function edit(Anomalie $anomalie) {
+        return view('anomalie.form', compact('anomalie'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Anomalie $anomalie)
-    {
-        //
+    public function update(Request $request, Anomalie $anomalie) {
+        $request->validate([
+            'cause_anomalie' => 'required|string',
+            'action_corrective' => 'required|string',
+            'date_signalement' => 'required|date',
+            'duree_panne' => 'required|integer',
+            'cout_reparation' => 'required|numeric',
+            'anomalie_resolue' => 'required|boolean',
+        ]);
+        $anomalie->update($request->all());
+        return redirect()->route('anomalie.index')->with('success', 'Anomalie mise à jour.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Anomalie $anomalie)
-    {
-        //
+    public function destroy(Anomalie $anomalie) {
+        $anomalie->delete();
+        return redirect()->route('anomalie.index')->with('success', 'Anomalie supprimée avec succès.');
     }
 }

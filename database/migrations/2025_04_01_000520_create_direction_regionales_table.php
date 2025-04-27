@@ -12,9 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('direction_regionales', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id(); 
+            $table->string('Nom_DR');
+            
         });
+        
     }
 
     /**

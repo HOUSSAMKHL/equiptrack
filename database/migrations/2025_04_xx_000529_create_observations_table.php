@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('frequences', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('observations', function (Blueprint $table) {
+            $table->id(); 
+            $table->text('description_panne');
         });
+        
     }
 
     /**
@@ -22,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('frequences');
+        Schema::dropIfExists('observations');
     }
 };

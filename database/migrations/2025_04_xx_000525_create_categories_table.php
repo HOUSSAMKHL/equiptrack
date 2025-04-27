@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('anomalies', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('categories', function (Blueprint $table) {
+            $table->id(); 
+            $table->string('nom_categorie');
         });
+        
     }
 
     /**
@@ -22,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('anomalies');
+        Schema::dropIfExists('categories');
     }
 };

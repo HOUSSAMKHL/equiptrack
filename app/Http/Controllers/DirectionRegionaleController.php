@@ -7,59 +7,42 @@ use Illuminate\Http\Request;
 
 class DirectionRegionaleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function index() {
+        $directions = DirectionRegionale::all();
+        return view('directionRegionale.index', compact('directions'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function create() {
+        return view('directionRegionale.form');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+        $request->validate([
+            'nom_direction_regionale' => 'required|string|max:255',
+        ]);
+
+        DirectionRegionale::create($request->all());
+        return redirect()->route('directionRegionale.index')->with('success', 'Direction régionale créée avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(DirectionRegionale $directionRegionale)
-    {
-        //
+    public function show(DirectionRegionale $direction) {
+        return view('directionRegionale.show', compact('direction'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(DirectionRegionale $directionRegionale)
-    {
-        //
+    public function edit(DirectionRegionale $direction) {
+        return view('directionRegionale.form', compact('direction'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, DirectionRegionale $directionRegionale)
-    {
-        //
+    public function update(Request $request, DirectionRegionale $direction) {
+        $request->validate([
+            'nom_direction_regionale' => 'required|string|max:255',
+        ]);
+        $direction->update($request->all());
+        return redirect()->route('directionRegionale.index')->with('success', 'Direction régionale mise à jour.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(DirectionRegionale $directionRegionale)
-    {
-        //
+    public function destroy(DirectionRegionale $direction) {
+        $direction->delete();
+        return redirect()->route('directionRegionale.index')->with('success', 'Direction régionale supprimée avec succès.');
     }
 }

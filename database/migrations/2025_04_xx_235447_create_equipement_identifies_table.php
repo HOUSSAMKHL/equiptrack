@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('equipement_identifiés', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('equipement_identifies', function (Blueprint $table) {
+            $table->id(); 
+            $table->string('nom_equipement');
+            $table->string('secteur');
+            $table->foreignId('id_categorie')->constrained('categories');
+            $table->foreignId('id_frequence')->constrained('frequences');
         });
+        
     }
 
     /**

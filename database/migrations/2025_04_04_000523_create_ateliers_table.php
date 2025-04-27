@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('complexes', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('ateliers', function (Blueprint $table) {
+            $table->id(); 
+            $table->string('numero_atelier');
+            $table->foreignId('id_etablissement')->constrained('efps');
         });
+        
     }
 
     /**
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('complexes');
+        Schema::dropIfExists('ateliers');
     }
 };

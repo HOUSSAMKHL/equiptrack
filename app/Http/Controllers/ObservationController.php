@@ -7,59 +7,42 @@ use Illuminate\Http\Request;
 
 class ObservationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function index() {
+        $observations = Observation::all();
+        return view('observation.index', compact('observations'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function create() {
+        return view('observation.form');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+        $request->validate([
+            'description_panne' => 'required|string',
+        ]);
+
+        Observation::create($request->all());
+        return redirect()->route('observation.index')->with('success', 'Observation créée avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Observation $observation)
-    {
-        //
+    public function show(Observation $observation) {
+        return view('observation.show', compact('observation'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Observation $observation)
-    {
-        //
+    public function edit(Observation $observation) {
+        return view('observation.form', compact('observation'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Observation $observation)
-    {
-        //
+    public function update(Request $request, Observation $observation) {
+        $request->validate([
+            'description_panne' => 'required|string',
+        ]);
+        $observation->update($request->all());
+        return redirect()->route('observation.index')->with('success', 'Observation mise à jour.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Observation $observation)
-    {
-        //
+    public function destroy(Observation $observation) {
+        $observation->delete();
+        return redirect()->route('observation.index')->with('success', 'Observation supprimée avec succès.');
     }
 }

@@ -7,59 +7,47 @@ use Illuminate\Http\Request;
 
 class IntervenantController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+    public function index() {
+        $intervenants = Intervenant::all();
+        return view('intervenant.index', compact('intervenants'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+    public function create() {
+        return view('intervenant.form');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+        $request->validate([
+            'nom_intervenant' => 'required|string|max:255',
+            'numero' => 'required|string|max:255',
+            'societe' => 'required|string|max:255',
+        ]);
+
+        Intervenant::create($request->all());
+        return redirect()->route('intervenant.index')->with('success', 'Intervenant créé avec succès.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Intervenant $intervenant)
-    {
-        //
+    public function show(Intervenant $intervenant) {
+        return view('intervenant.show', compact('intervenant'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Intervenant $intervenant)
-    {
-        //
+    public function edit(Intervenant $intervenant) {
+        return view('intervenant.form', compact('intervenant'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Intervenant $intervenant)
-    {
-        //
+    public function update(Request $request, Intervenant $intervenant) {
+        $request->validate([
+            'nom_intervenant' => 'required|string|max:255',
+            'numero' => 'required|string|max:255',
+            'societe' => 'required|string|max:255',
+        ]);
+
+        $intervenant->update($request->all());
+        return redirect()->route('intervenant.index')->with('success', 'Intervenant mis à jour avec succès.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Intervenant $intervenant)
-    {
-        //
+    public function destroy(Intervenant $intervenant) {
+        $intervenant->delete();
+        return redirect()->route('intervenant.index')->with('success', 'Intervenant supprimé avec succès.');
     }
 }
