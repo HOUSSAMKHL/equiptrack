@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\DB;
 class CategorieSeeder extends Seeder
 {
     public function run(): void
-    {
-        DB::table('categories')->insert([
-            ['id' => 1, 'nom_categorie' => 'Pompe'],
-            ['id' => 2, 'nom_categorie' => 'Compresseur'],
-        ]);
-    }
+{
+    DB::table('categories')->insert([
+        ['nom_categorie' => 'Pompe'],
+        ['nom_categorie' => 'Compresseur'],
+    ]);
+}
 }

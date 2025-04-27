@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\DB;
 class FrequenceSeeder extends Seeder
 {
     public function run(): void
-    {
-        DB::table('frequences')->insert([
-            ['id' => 1, 'type_frequence' => 'Hebdomadaire'],
-            ['id' => 2, 'type_frequence' => 'Mensuelle'],
-        ]);
-    }
+{
+    DB::table('frequences')->insert([
+        ['type_frequence' => 'Hebdomadaire'],
+        ['type_frequence' => 'Mensuelle'],
+    ]);
+}
 }
