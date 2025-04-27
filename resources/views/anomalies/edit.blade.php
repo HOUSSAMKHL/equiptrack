@@ -1,3 +1,4 @@
+@extends('layouts.app')
 
     <h1>Modifier l’anomalie</h1>
 

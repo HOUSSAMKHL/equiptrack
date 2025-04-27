@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter un Atelier</title>
+    @extends('layouts.app')
+
 </head>
 <body>
     <h1>Ajouter un Atelier</h1>

@@ -33,7 +33,7 @@
 
 <!-- Sidebar -->
 <div class="sidebar">
-    <h3 class="text-white text-center">Equip-Track<</h3>
+    <h3 class="text-white text-center">Equip-Track</h3>
     <a href="{{ route('anomalies.index') }}">Anomalies</a>
     <a href="{{ route('ateliers.index') }}">Ateliers</a>
     <a href="{{ route('categories.index') }}">Catégories</a>
@@ -52,9 +52,9 @@
     <a href="{{ route('direction_regionales.index') }}">Directions Régionales</a>
 </div>
 
-<!-- Content Area -->
+<!-- Contenu principal -->
 <div class="content container mt-4">
-    <h1>Bienvenue dans le système de gestion des équipements</h1>
+    @yield('content')  <!-- Ceci permettra d'injecter le contenu spécifique de chaque page -->
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

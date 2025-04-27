@@ -8,9 +8,21 @@ use Illuminate\Http\Request;
 class ComplexeController extends Controller
 {
     public function index() {
-        $complexes = Complexe::all();
+        // Charger la relation directionRegionale
+        $complexes = Complexe::with('directionRegionale')->get();
+    
+        // Vérifier si la relation existe pour chaque complexe
+        foreach ($complexes as $complexe) {
+            if (!$complexe->directionRegionale) {
+                // Gérer le cas où il n'y a pas de direction régionale associée
+                // Par exemple, vous pouvez définir une valeur par défaut ou laisser vide
+                $complexe->directionRegionale = (object) ['nom_direction_regionale' => 'Non assignée'];
+            }
+        }
+    
         return view('complexes.index', compact('complexes'));
     }
+    
 
     public function create() {
         return view('complexes.create');

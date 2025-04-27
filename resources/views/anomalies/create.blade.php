@@ -1,3 +1,4 @@
+@extends('layouts.app')
 
 <h1>Créer une anomalie</h1>
 <form method="POST" action="{{ route('anomalies.store') }}">

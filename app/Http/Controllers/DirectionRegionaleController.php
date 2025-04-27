@@ -9,11 +9,11 @@ class DirectionRegionaleController extends Controller
 {
     public function index() {
         $directions = DirectionRegionale::all();
-        return view('directionRegionales.index', compact('directions'));
+        return view('direction_regionales.index', compact('directions'));
     }
 
     public function create() {
-        return view('directionRegionales.create');
+        return view('direction_regionales.create');
     }
 
     public function store(Request $request) {
@@ -22,15 +22,15 @@ class DirectionRegionaleController extends Controller
         ]);
 
         DirectionRegionale::create($request->all());
-        return redirect()->route('directionRegionales.index')->with('success', 'Direction régionale créée avec succès.');
+        return redirect()->route('direction_regionales.index')->with('success', 'Direction régionale créée avec succès.');
     }
 
     public function show(DirectionRegionale $direction) {
-        return view('directionRegionales.show', compact('direction'));
+        return view('direction_regionales.show', compact('direction'));
     }
 
     public function edit(DirectionRegionale $direction) {
-        return view('directionRegionales.edit', compact('direction'));
+        return view('direction_regionales.edit', compact('direction'));
     }
 
     public function update(Request $request, DirectionRegionale $direction) {
@@ -38,11 +38,11 @@ class DirectionRegionaleController extends Controller
             'nom_direction_regionale' => 'required|string|max:255',
         ]);
         $direction->update($request->all());
-        return redirect()->route('directionRegionales.index')->with('success', 'Direction régionale mise à jour.');
+        return redirect()->route('direction_regionales.index')->with('success', 'Direction régionale mise à jour.');
     }
 
     public function destroy(DirectionRegionale $direction) {
         $direction->delete();
-        return redirect()->route('directionRegionales.index')->with('success', 'Direction régionale supprimée avec succès.');
+        return redirect()->route('direction_regionales.index')->with('success', 'Direction régionale supprimée avec succès.');
     }
 }

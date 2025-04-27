@@ -8,12 +8,16 @@ use Illuminate\Http\Request;
 class EquipementIdentifieController extends Controller
 {
     public function index() {
-        $equipements_identifies = EquipementIdentifie::all();
-        return view('equipement_identifie.index', compact('equipements_identifies'));
+        $equipements_identifies = EquipementIdentifie::with('frequence')->get();
+        
+        return view('equipements_identifies.index', compact('equipements_identifies'));
     }
+    
+    
+    
 
     public function create() {
-        return view('equipement_identifie.form');
+        return view('equipements_identifies.create');
     }
 
     public function store(Request $request) {
@@ -23,19 +27,19 @@ class EquipementIdentifieController extends Controller
             'annee_dacquisition' => 'required|date_format:Y',
             'valeur_dacquisition' => 'required|numeric',
             'id_atelier' => 'required|exists:ateliers,id',
-            'id_equipement' => 'required|exists:equipements,id',
+            'id_frequence' => 'required|exists:frequences,id',
         ]);
 
         EquipementIdentifie::create($request->all());
-        return redirect()->route('equipement_identifie.index')->with('success', 'Équipement identifié créé avec succès.');
+        return redirect()->route('equipements_identifies.index')->with('success', 'Équipement identifié créé avec succès.');
     }
 
     public function show(EquipementIdentifie $equipementIdentifie) {
-        return view('equipement_identifie.show', compact('equipementIdentifie'));
+        return view('equipements_identifies.show', compact('equipementIdentifie'));
     }
 
     public function edit(EquipementIdentifie $equipementIdentifie) {
-        return view('equipement_identifie.form', compact('equipementIdentifie'));
+        return view('equipements_identifies.edit', compact('equipementIdentifie'));
     }
 
     public function update(Request $request, EquipementIdentifie $equipementIdentifie) {
@@ -49,11 +53,11 @@ class EquipementIdentifieController extends Controller
         ]);
         
         $equipementIdentifie->update($request->all());
-        return redirect()->route('equipement_identifie.index')->with('success', 'Équipement identifié mis à jour avec succès.');
+        return redirect()->route('equipements_identifies.index')->with('success', 'Équipement identifié mis à jour avec succès.');
     }
 
     public function destroy(EquipementIdentifie $equipementIdentifie) {
         $equipementIdentifie->delete();
-        return redirect()->route('equipement_identifie.index')->with('success', 'Équipement identifié supprimé avec succès.');
+        return redirect()->route('equipements_identifies.index')->with('success', 'Équipement identifié supprimé avec succès.');
     }
 }

@@ -24,7 +24,8 @@ class EquipementIdentifie extends Model
     }
 
     public function frequence()
-    {
-        return $this->belongsTo(Frequence::class, 'id_frequence');
-    }
+{
+    return $this->belongsTo(Frequence::class, 'id_frequence');
+}
+
 }

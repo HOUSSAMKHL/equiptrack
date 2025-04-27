@@ -25,9 +25,9 @@ class EquipementTracable extends Model
         return $this->belongsTo(Atelier::class, 'id_atelier');
     }
 
-    public function equipement()
+    public function equipementIdentifie()
     {
-        return $this->belongsTo(Equipement::class, 'id_equipement');
+        return $this->belongsTo(EquipementIdentifie::class, 'id_equipement');
     }
 }
 

@@ -19,18 +19,19 @@ class Effectuer extends Model
         'durée',
     ];
 
-    public function user()
+    public function utilisateur()
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->belongsTo(Utilisateur::class);
     }
-
-    public function exemplaire()
+    
+    public function equipementTracable()
     {
-        return $this->belongsTo(Exemplaire::class, 'id_exemplaire');
+        return $this->belongsTo(EquipementTracable::class);
     }
-
+    
     public function operation()
     {
-        return $this->belongsTo(Operation::class, 'id_operation');
+        return $this->belongsTo(Operation::class);
     }
+    
 }

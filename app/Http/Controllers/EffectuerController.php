@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Effectuer;
 use Illuminate\Http\Request;
+use App\Models\Utilisateur;
+use App\Models\Operation;
+use App\Models\EquipementTracable;
 
 class EffectuerController extends Controller
 {
@@ -33,14 +36,23 @@ class EffectuerController extends Controller
         return view('effectuers.show', compact('effectuer'));
     }
 
-    public function edit(Effectuer $effectuer) {
-        return view('effectuers.edit', compact('effectuer'));
-    }
+    public function edit($id)
+{
+    $effectuer = Effectuer::findOrFail($id);
+    $utilisateurs = Utilisateur::all();
+    $equipementsTracables = EquipementTracable::all();
+    $operations = Operation::all();
+
+    // Ajoute bien $operations dans compact()
+    return view('effectuers.edit', compact('effectuer', 'utilisateurs', 'equipementsTracables', 'operations'));
+}
+
+
 
     public function update(Request $request, Effectuer $effectuer) {
         $request->validate([
             'id_user' => 'required|exists:users,id',
-            'id_exemplaire' => 'required|exists:exemplaires,id',
+            'id_exemplaire' => 'required|exists:equipement_tracables,id',
             'id_operation' => 'required|exists:operations,id',
             'date_operation' => 'required|date',
             'durée' => 'nullable|date_format:H:i:s',

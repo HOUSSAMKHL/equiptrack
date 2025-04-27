@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Détails de l'anomalie</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    @extends('layouts.app')
+
 </head>
 <body class="bg-light">
 
