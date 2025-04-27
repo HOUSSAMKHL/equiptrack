@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -8,8 +10,7 @@ class EquipementTracableSeeder extends Seeder
     public function run(): void
     {
         DB::table('equipement_tracables')->insert([
-            ['id' => 1, 'code' => 'TRC-001', 'id_atelier' => 1, 'id_identifie' => 1],
+            ['id' => 1, 'statut' => 'Actif', 'reference' => 'TRC-001', 'annee_dacquisition' => 2021, 'valeur_dacquisition' => 1500.00, 'id_atelier' => 1, 'id_equipement' => 1],
         ]);
     }
 }
-

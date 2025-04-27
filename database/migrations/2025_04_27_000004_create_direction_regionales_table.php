@@ -12,9 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('direction_regionales', function (Blueprint $table) {
-            $table->id(); 
+            $table->id(); // This creates an auto-incrementing primary key
             $table->string('Nom_DR');
-            
         });
         
     }

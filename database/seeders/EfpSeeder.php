@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -8,8 +10,8 @@ class EfpSeeder extends Seeder
     public function run(): void
     {
         DB::table('efps')->insert([
-            ['id_efp' => 1, 'nom_efp' => 'EFP1', 'id_complexe' => 1],
-            ['id_efp' => 2, 'nom_efp' => 'EFP2', 'id_complexe' => 2],
+            ['id' => 1, 'nom_etablissement' => 'EFP1', 'adresse' => 'Adresse 1', 'numero' => '123456', 'email' => 'efp1@example.com', 'id_complexe' => 1],
+            ['id' => 2, 'nom_etablissement' => 'EFP2', 'adresse' => 'Adresse 2', 'numero' => '654321', 'email' => 'efp2@example.com', 'id_complexe' => 2],
         ]);
     }
 }
