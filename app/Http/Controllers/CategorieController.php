@@ -9,11 +9,11 @@ class CategorieController extends Controller
 {
     public function index() {
         $categories = Categorie::all();
-        return view('categorie.index', compact('categories'));
+        return view('categories.index', compact('categories'));
     }
 
     public function create() {
-        return view('categorie.form');
+        return view('categories.create');
     }
 
     public function store(Request $request) {
@@ -22,15 +22,15 @@ class CategorieController extends Controller
         ]);
 
         Categorie::create($request->all());
-        return redirect()->route('categorie.index')->with('success', 'Catégorie créée avec succès.');
+        return redirect()->route('categories.index')->with('success', 'Catégorie créée avec succès.');
     }
 
     public function show(Categorie $categorie) {
-        return view('categorie.show', compact('categorie'));
+        return view('categories.show', compact('categorie'));
     }
 
     public function edit(Categorie $categorie) {
-        return view('categorie.form', compact('categorie'));
+        return view('categories.edit', compact('categorie'));
     }
 
     public function update(Request $request, Categorie $categorie) {
@@ -38,11 +38,11 @@ class CategorieController extends Controller
             'nom_categorie' => 'required|string|max:255',
         ]);
         $categorie->update($request->all());
-        return redirect()->route('categorie.index')->with('success', 'Catégorie mise à jour.');
+        return redirect()->route('categories.index')->with('success', 'Catégorie mise à jour.');
     }
 
     public function destroy(Categorie $categorie) {
         $categorie->delete();
-        return redirect()->route('categorie.index')->with('success', 'Catégorie supprimée avec succès.');
+        return redirect()->route('categories.index')->with('success', 'Catégorie supprimée avec succès.');
     }
 }

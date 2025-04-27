@@ -9,11 +9,11 @@ class OperationController extends Controller
 {
     public function index() {
         $operations = Operation::all();
-        return view('operation.index', compact('operations'));
+        return view('operations.index', compact('operations'));
     }
 
     public function create() {
-        return view('operation.form');
+        return view('operations.create');
     }
 
     public function store(Request $request) {
@@ -22,15 +22,15 @@ class OperationController extends Controller
         ]);
 
         Operation::create($request->all());
-        return redirect()->route('operation.index')->with('success', 'Opération créée avec succès.');
+        return redirect()->route('operations.index')->with('success', 'Opération créée avec succès.');
     }
 
     public function show(Operation $operation) {
-        return view('operation.show', compact('operation'));
+        return view('operations.show', compact('operation'));
     }
 
     public function edit(Operation $operation) {
-        return view('operation.form', compact('operation'));
+        return view('operations.edit', compact('operation'));
     }
 
     public function update(Request $request, Operation $operation) {
@@ -39,11 +39,11 @@ class OperationController extends Controller
         ]);
 
         $operation->update($request->all());
-        return redirect()->route('operation.index')->with('success', 'Opération mise à jour avec succès.');
+        return redirect()->route('operations.index')->with('success', 'Opération mise à jour avec succès.');
     }
 
     public function destroy(Operation $operation) {
         $operation->delete();
-        return redirect()->route('operation.index')->with('success', 'Opération supprimée avec succès.');
+        return redirect()->route('operations.index')->with('success', 'Opération supprimée avec succès.');
     }
 }

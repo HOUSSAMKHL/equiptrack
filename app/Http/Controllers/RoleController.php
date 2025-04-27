@@ -9,11 +9,11 @@ class RoleController extends Controller
 {
     public function index() {
         $roles = Role::all();
-        return view('role.index', compact('roles'));
+        return view('roles.index', compact('roles'));
     }
 
     public function create() {
-        return view('role.form');
+        return view('roles.create');
     }
 
     public function store(Request $request) {
@@ -22,15 +22,15 @@ class RoleController extends Controller
         ]);
 
         Role::create($request->all());
-        return redirect()->route('role.index')->with('success', 'Rôle créé avec succès.');
+        return redirect()->route('roles.index')->with('success', 'Rôle créé avec succès.');
     }
 
     public function show(Role $role) {
-        return view('role.show', compact('role'));
+        return view('roles.show', compact('role'));
     }
 
     public function edit(Role $role) {
-        return view('role.form', compact('role'));
+        return view('roles.edit', compact('role'));
     }
 
     public function update(Request $request, Role $role) {
@@ -39,11 +39,11 @@ class RoleController extends Controller
         ]);
 
         $role->update($request->all());
-        return redirect()->route('role.index')->with('success', 'Rôle mis à jour avec succès.');
+        return redirect()->route('roles.index')->with('success', 'Rôle mis à jour avec succès.');
     }
 
     public function destroy(Role $role) {
         $role->delete();
-        return redirect()->route('role.index')->with('success', 'Rôle supprimé avec succès.');
+        return redirect()->route('roles.index')->with('success', 'Rôle supprimé avec succès.');
     }
 }

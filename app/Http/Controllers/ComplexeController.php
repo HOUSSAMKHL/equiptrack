@@ -9,11 +9,11 @@ class ComplexeController extends Controller
 {
     public function index() {
         $complexes = Complexe::all();
-        return view('complexe.index', compact('complexes'));
+        return view('complexes.index', compact('complexes'));
     }
 
     public function create() {
-        return view('complexe.form');
+        return view('complexes.create');
     }
 
     public function store(Request $request) {
@@ -23,15 +23,15 @@ class ComplexeController extends Controller
         ]);
 
         Complexe::create($request->all());
-        return redirect()->route('complexe.index')->with('success', 'Complexe créé avec succès.');
+        return redirect()->route('complexes.index')->with('success', 'Complexe créé avec succès.');
     }
 
     public function show(Complexe $complexe) {
-        return view('complexe.show', compact('complexe'));
+        return view('complexes.show', compact('complexe'));
     }
 
     public function edit(Complexe $complexe) {
-        return view('complexe.form', compact('complexe'));
+        return view('complexes.edit', compact('complexe'));
     }
 
     public function update(Request $request, Complexe $complexe) {

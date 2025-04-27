@@ -9,11 +9,11 @@ class AnomalieController extends Controller
 {
     public function index() {
         $anomalies = Anomalie::all();
-        return view('anomalie.index', compact('anomalies'));
+        return view('anomalies.index', compact('anomalies'));
     }
 
     public function create() {
-        return view('anomalie.form');
+        return view('anomalies.create');
     }
 
     public function store(Request $request) {
@@ -27,15 +27,15 @@ class AnomalieController extends Controller
         ]);
 
         Anomalie::create($request->all());
-        return redirect()->route('anomalie.index')->with('success', 'Anomalie signalée avec succès.');
+        return redirect()->route('anomalies.index')->with('success', 'Anomalie signalée avec succès.');
     }
 
     public function show(Anomalie $anomalie) {
-        return view('anomalie.show', compact('anomalie'));
+        return view('anomalies.show', compact('anomalie'));
     }
 
     public function edit(Anomalie $anomalie) {
-        return view('anomalie.form', compact('anomalie'));
+        return view('anomalies.edit', compact('anomalie'));
     }
 
     public function update(Request $request, Anomalie $anomalie) {
@@ -48,11 +48,11 @@ class AnomalieController extends Controller
             'anomalie_resolue' => 'required|boolean',
         ]);
         $anomalie->update($request->all());
-        return redirect()->route('anomalie.index')->with('success', 'Anomalie mise à jour.');
+        return redirect()->route('anomalies.index')->with('success', 'Anomalie mise à jour.');
     }
 
     public function destroy(Anomalie $anomalie) {
         $anomalie->delete();
-        return redirect()->route('anomalie.index')->with('success', 'Anomalie supprimée avec succès.');
+        return redirect()->route('anomalies.index')->with('success', 'Anomalie supprimée avec succès.');
     }
 }

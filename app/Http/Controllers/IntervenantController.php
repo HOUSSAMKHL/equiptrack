@@ -9,11 +9,11 @@ class IntervenantController extends Controller
 {
     public function index() {
         $intervenants = Intervenant::all();
-        return view('intervenant.index', compact('intervenants'));
+        return view('intervenants.index', compact('intervenants'));
     }
 
     public function create() {
-        return view('intervenant.form');
+        return view('intervenants.create');
     }
 
     public function store(Request $request) {
@@ -24,15 +24,15 @@ class IntervenantController extends Controller
         ]);
 
         Intervenant::create($request->all());
-        return redirect()->route('intervenant.index')->with('success', 'Intervenant créé avec succès.');
+        return redirect()->route('intervenants.index')->with('success', 'Intervenant créé avec succès.');
     }
 
     public function show(Intervenant $intervenant) {
-        return view('intervenant.show', compact('intervenant'));
+        return view('intervenants.show', compact('intervenant'));
     }
 
     public function edit(Intervenant $intervenant) {
-        return view('intervenant.form', compact('intervenant'));
+        return view('intervenants.edit', compact('intervenant'));
     }
 
     public function update(Request $request, Intervenant $intervenant) {
@@ -43,11 +43,11 @@ class IntervenantController extends Controller
         ]);
 
         $intervenant->update($request->all());
-        return redirect()->route('intervenant.index')->with('success', 'Intervenant mis à jour avec succès.');
+        return redirect()->route('intervenants.index')->with('success', 'Intervenant mis à jour avec succès.');
     }
 
     public function destroy(Intervenant $intervenant) {
         $intervenant->delete();
-        return redirect()->route('intervenant.index')->with('success', 'Intervenant supprimé avec succès.');
+        return redirect()->route('intervenants.index')->with('success', 'Intervenant supprimé avec succès.');
     }
 }

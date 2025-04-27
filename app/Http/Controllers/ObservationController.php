@@ -9,11 +9,11 @@ class ObservationController extends Controller
 {
     public function index() {
         $observations = Observation::all();
-        return view('observation.index', compact('observations'));
+        return view('observations.index', compact('observations'));
     }
 
     public function create() {
-        return view('observation.form');
+        return view('observations.create');
     }
 
     public function store(Request $request) {
@@ -22,15 +22,15 @@ class ObservationController extends Controller
         ]);
 
         Observation::create($request->all());
-        return redirect()->route('observation.index')->with('success', 'Observation créée avec succès.');
+        return redirect()->route('observations.index')->with('success', 'Observation créée avec succès.');
     }
 
     public function show(Observation $observation) {
-        return view('observation.show', compact('observation'));
+        return view('observations.show', compact('observation'));
     }
 
     public function edit(Observation $observation) {
-        return view('observation.form', compact('observation'));
+        return view('observations.edit', compact('observation'));
     }
 
     public function update(Request $request, Observation $observation) {
@@ -38,11 +38,11 @@ class ObservationController extends Controller
             'description_panne' => 'required|string',
         ]);
         $observation->update($request->all());
-        return redirect()->route('observation.index')->with('success', 'Observation mise à jour.');
+        return redirect()->route('observations.index')->with('success', 'Observation mise à jour.');
     }
 
     public function destroy(Observation $observation) {
         $observation->delete();
-        return redirect()->route('observation.index')->with('success', 'Observation supprimée avec succès.');
+        return redirect()->route('observations.index')->with('success', 'Observation supprimée avec succès.');
     }
 }

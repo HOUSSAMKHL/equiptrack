@@ -9,11 +9,11 @@ class EquipementTracableController extends Controller
 {
     public function index() {
         $equipements_tracables = EquipementTracable::all();
-        return view('equipement_tracable.index', compact('equipements_tracables'));
+        return view('equipement_tracables.index', compact('equipements_tracables'));
     }
 
     public function create() {
-        return view('equipement_tracable.form');
+        return view('equipement_tracables.create');
     }
 
     public function store(Request $request) {
@@ -27,15 +27,15 @@ class EquipementTracableController extends Controller
         ]);
 
         EquipementTracable::create($request->all());
-        return redirect()->route('equipement_tracable.index')->with('success', 'Équipement tracable créé avec succès.');
+        return redirect()->route('equipement_tracables.index')->with('success', 'Équipement tracable créé avec succès.');
     }
 
     public function show(EquipementTracable $equipementTracable) {
-        return view('equipement_tracable.show', compact('equipementTracable'));
+        return view('equipement_tracables.show', compact('equipementTracable'));
     }
 
     public function edit(EquipementTracable $equipementTracable) {
-        return view('equipement_tracable.form', compact('equipementTracable'));
+        return view('equipement_tracables.edit', compact('equipementTracable'));
     }
 
     public function update(Request $request, EquipementTracable $equipementTracable) {
@@ -49,11 +49,11 @@ class EquipementTracableController extends Controller
         ]);
         
         $equipementTracable->update($request->all());
-        return redirect()->route('equipement_tracable.index')->with('success', 'Équipement tracable mis à jour avec succès.');
+        return redirect()->route('equipement_tracables.index')->with('success', 'Équipement tracable mis à jour avec succès.');
     }
 
     public function destroy(EquipementTracable $equipementTracable) {
         $equipementTracable->delete();
-        return redirect()->route('equipement_tracable.index')->with('success', 'Équipement tracable supprimé avec succès.');
+        return redirect()->route('equipement_tracables.index')->with('success', 'Équipement tracable supprimé avec succès.');
     }
 }

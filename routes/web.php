@@ -13,12 +13,15 @@ use App\Http\Controllers\AtelierController;
 use App\Http\Controllers\DirectionRegionalesController;
 use App\Http\Controllers\ObservationController;
 use App\Http\Controllers\EffectuerController;
+use App\Http\Controllers\EfpController;
+use App\Http\Controllers\ComplexeController;
+use App\Http\Controllers\AnomalieController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('anomalies', AnomaliesController::class);
+Route::resource('anomalies', AnomalieController::class);
 Route::resource('utilisateurs', UtilisateurController::class);
 Route::resource('roles', RoleController::class);
 Route::resource('operations', OperationController::class);
@@ -31,3 +34,7 @@ Route::resource('ateliers', AtelierController::class);
 Route::resource('direction_regionales', DirectionRegionalesController::class);
 Route::resource('observations', ObservationController::class);
 Route::resource('effectuers', EffectuerController::class);
+Route::resource('efps', EfpController::class);
+Route::resource('complexes', ComplexeController::class);
+
+

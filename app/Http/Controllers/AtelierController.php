@@ -9,11 +9,11 @@ class AtelierController extends Controller
 {
     public function index() {
         $ateliers = Atelier::all();
-        return view('atelier.index', compact('ateliers'));
+        return view('ateliers.index', compact('ateliers'));
     }
 
     public function create() {
-        return view('atelier.form');
+        return view('ateliers.create');
     }
 
     public function store(Request $request) {
@@ -23,15 +23,15 @@ class AtelierController extends Controller
         ]);
 
         Atelier::create($request->all());
-        return redirect()->route('atelier.index')->with('success', 'Atelier créé avec succès.');
+        return redirect()->route('ateliers.index')->with('success', 'Atelier créé avec succès.');
     }
 
     public function show(Atelier $atelier) {
-        return view('atelier.show', compact('atelier'));
+        return view('ateliers.show', compact('atelier'));
     }
 
     public function edit(Atelier $atelier) {
-        return view('atelier.form', compact('atelier'));
+        return view('ateliers.edit', compact('atelier'));
     }
 
     public function update(Request $request, Atelier $atelier) {
@@ -40,11 +40,11 @@ class AtelierController extends Controller
             'id_etablissement' => 'required|exists:etablissements,id',
         ]);
         $atelier->update($request->all());
-        return redirect()->route('atelier.index')->with('success', 'Atelier mis à jour.');
+        return redirect()->route('ateliers.index')->with('success', 'Atelier mis à jour.');
     }
 
     public function destroy(Atelier $atelier) {
         $atelier->delete();
-        return redirect()->route('atelier.index')->with('success', 'Atelier supprimé avec succès.');
+        return redirect()->route('ateliers.index')->with('success', 'Atelier supprimé avec succès.');
     }
 }

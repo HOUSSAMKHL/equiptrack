@@ -9,11 +9,11 @@ class EfpController extends Controller
 {
     public function index() {
         $Efps = Efp::all();
-        return view('Efp.index', compact('Efps'));
+        return view('Efps.index', compact('Efps'));
     }
 
     public function create() {
-        return view('Efp.form');
+        return view('Efps.create');
     }
 
     public function store(Request $request) {
@@ -26,15 +26,15 @@ class EfpController extends Controller
         ]);
 
         Efp::create($request->all());
-        return redirect()->route('Efp.index')->with('success', 'Efp créé avec succès.');
+        return redirect()->route('Efps.index')->with('success', 'Efp créé avec succès.');
     }
 
     public function show(Efp $Efp) {
-        return view('Efp.show', compact('Efp'));
+        return view('Efps.show', compact('Efp'));
     }
 
     public function edit(Efp $Efp) {
-        return view('Efp.form', compact('Efp'));
+        return view('Efps.edit', compact('Efp'));
     }
 
     public function update(Request $request, Efp $Efp) {
@@ -46,11 +46,11 @@ class EfpController extends Controller
             'id_complexe' => 'required|exists:complexes,id',
         ]);
         $Efp->update($request->all());
-        return redirect()->route('Efp.index')->with('success', 'Efp mis à jour avec succès.');
+        return redirect()->route('Efps.index')->with('success', 'Efp mis à jour avec succès.');
     }
 
     public function destroy(Efp $Efp) {
         $Efp->delete();
-        return redirect()->route('Efp.index')->with('success', 'Efp supprimé avec succès.');
+        return redirect()->route('Efps.index')->with('success', 'Efp supprimé avec succès.');
     }
 }
