@@ -11,7 +11,7 @@ use App\Models\EquipementTracable;
 class EffectuerController extends Controller
 {
     public function index() {
-        $effectuers = Effectuer::all();
+        $effectuers = Effectuer::with('utilisateur','equipementTracable','operation')->get();
         return view('effectuers.index', compact('effectuers'));
     }
 

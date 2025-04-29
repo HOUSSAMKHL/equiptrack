@@ -14,6 +14,7 @@ use Database\Seeders\EquipementTracableSeeder;
 use Database\Seeders\RoleSeeder;
 use Database\Seeders\UtilisateurSeeder;
 use App\Models\User;
+use Database\Seeders\ObservationSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -33,10 +34,11 @@ class DatabaseSeeder extends Seeder
         EquipementTracableSeeder::class,
         RoleSeeder::class,
         UtilisateurSeeder::class,
-        AnomalieSeeder::class, // Ensure this is included
-        OperationSeeder::class, // Ensure this is included
-        IntervenantSeeder::class, // Ensure this is included
-        EffectuerSeeder::class, // Ensure this is included
+        AnomalieSeeder::class, 
+        OperationSeeder::class,
+        IntervenantSeeder::class, 
+        EffectuerSeeder::class, 
+        ObservationSeeder::class,
     ]);
 
     // Check if the user already exists before creating

@@ -16,8 +16,8 @@ class Atelier extends Model
         'id_etablissement',
     ];
 
-    public function etablissement()
+    public function efp()
     {
-        return $this->belongsTo(Etablissement::class, 'id_etablissement');
+        return $this->belongsTo(Efp::class, 'id_etablissement');
     }
 }

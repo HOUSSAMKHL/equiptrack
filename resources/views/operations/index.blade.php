@@ -6,35 +6,109 @@
     <title>Liste des Opérations</title>
     @extends('layouts.app')
 
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .wrapper {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        a.btn, button.btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn.success {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn.info {
+        background-color: #17a2b8;
+        color: white;
+    }
+
+        .btn.warning {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .btn.danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #e9ecef;
+            font-weight: bold;
+        }
+
+        .inline-form {
+            display: inline;
+        }
+    </style>
 </head>
 <body>
-    <h1>Liste des Opérations</h1>
-    <a href="{{ route('operations.create') }}">Ajouter une Opération</a>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nom de l'Opération</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($operations as $operation)
+    <div class="wrapper">
+        <h1>Liste des Opérations</h1>
+
+        <a href="{{ route('operations.create') }}" class="btn success">Ajouter une Opération</a>
+
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ $operation->id }}</td>
-                    <td>{{ $operation->nom_operation }}</td>
-                    <td>
-                        <a href="{{ route('operations.show', $operation->id) }}">Voir</a> |
-                        <a href="{{ route('operations.edit', $operation->id) }}">Modifier</a> |
-                        <form action="{{ route('operations.destroy', $operation->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">Supprimer</button>
-                        </form>
-                    </td>
+                    <th>ID</th>
+                    <th>Nom de l'Opération</th>
+                    <th>Actions</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach($operations as $operation)
+                    <tr>
+                        <td>{{ $operation->id }}</td>
+                        <td>{{ $operation->nom_operation }}</td>
+                        <td>
+                            <a href="{{ route('operations.show', $operation->id) }}" class="btn info">Voir</a> |
+                            <a href="{{ route('operations.edit', $operation->id) }}" class="btn warning">Modifier</a> |
+                            <form action="{{ route('operations.destroy', $operation->id) }}" method="POST" class="inline-form" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette opération ?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn danger">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

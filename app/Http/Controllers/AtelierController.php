@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class AtelierController extends Controller
 {
     public function index() {
-        $ateliers = Atelier::all();
+        $ateliers = Atelier::with('efp')->get();
         return view('ateliers.index', compact('ateliers'));
     }
 

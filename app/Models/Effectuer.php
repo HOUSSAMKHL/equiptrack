@@ -21,17 +21,17 @@ class Effectuer extends Model
 
     public function utilisateur()
     {
-        return $this->belongsTo(Utilisateur::class);
+        return $this->belongsTo(Utilisateur::class , 'id_user');
     }
     
     public function equipementTracable()
     {
-        return $this->belongsTo(EquipementTracable::class);
+        return $this->belongsTo(EquipementTracable::class , 'id_exemplaire');
     }
     
     public function operation()
     {
-        return $this->belongsTo(Operation::class);
+        return $this->belongsTo(Operation::class , 'id_operation');
     }
     
 }

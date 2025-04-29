@@ -11,6 +11,8 @@ class Anomalie extends Model
 
     protected $table = 'anomalies';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'cause_anomalie',
         'action_corrective',
@@ -23,9 +25,9 @@ class Anomalie extends Model
         'id_user',
     ];
 
-    public function user()
+    public function utilisateur()
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->belongsTo(Utilisateur::class, 'id_user');
     }
 }
 

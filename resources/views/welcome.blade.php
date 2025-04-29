@@ -1,62 +1,13 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Gestion des Équipements</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-        /* Style pour le sidebar */
-        .sidebar {
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 250px;
-            background-color: #1A1F2C;
-            padding-top: 20px;
-        }
-        .sidebar a {
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            display: block;
-        }
-        .sidebar a:hover {
-            background-color: #575757;
-        }
-        .content {
-            margin-left: 260px;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Gestion des equipements </title>
 </head>
 <body>
-
-<!-- Sidebar -->
-<div class="sidebar">
-    <h3 class="text-white text-center">Equip-Track<</h3>
-    <a href="{{ route('anomalies.index') }}">Anomalies</a>
-    <a href="{{ route('ateliers.index') }}">Ateliers</a>
-    <a href="{{ route('categories.index') }}">Catégories</a>
-    <a href="{{ route('effectuers.index') }}">Effectuer</a>
-    <a href="{{ route('efps.index') }}">EFPs</a>
-    <a href="{{ route('equipements_identifies.index') }}">Équipements Identifiés</a>
-    <a href="{{ route('equipements_tracables.index') }}">Équipements Traçables</a>
-    <a href="{{ route('frequences.index') }}">Fréquences</a>
-    <a href="{{ route('intervenants.index') }}">Intervenants</a>
-    <a href="{{ route('operations.index') }}">Opérations</a>
-    <a href="{{ route('roles.index') }}">Rôles</a>
-    <a href="{{ route('utilisateurs.index') }}">Utilisateurs</a>
-    <a href="{{ route('observations.index') }}">Observations</a>
-    <a href="{{ route('complexes.index') }}">Complexes</a>
-    <a href="{{ route('efps.index') }}">Établissements</a>
-    <a href="{{ route('direction_regionales.index') }}">Directions Régionales</a>
-</div>
-
-<!-- Content Area -->
-<div class="content container mt-4">
-    <h1>Bienvenue dans le système de gestion des équipements</h1>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @extends('layouts.app')
+    <h1 style="margin-left: 25%">Bienvenu sur le systéme de gestion des equipements</h1>
 </body>
 </html>

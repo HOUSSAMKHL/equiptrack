@@ -9,8 +9,18 @@ class ObservationSeeder extends Seeder
 {
     public function run(): void
 {
-    DB::table('intervenants')->insert([
-        ['nom_intervenant' => 'Intervenant 1', 'numero' => '0612345678', 'societe' => 'Societe A'],
+    DB::table('observations')->insert([
+        [
+           
+            'description_panne' => 'Description for observation 1',
+           
+        ],
+        [
+            
+            'description_panne' => 'Description for observation 2',
+           
+        ],
+        // Add more observations as needed
     ]);
 }
 }

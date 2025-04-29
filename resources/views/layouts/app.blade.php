@@ -5,7 +5,6 @@
     <title>Gestion des Équipements</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
-        /* Style pour le sidebar */
         .sidebar {
             height: 100vh;
             position: fixed;
@@ -48,7 +47,6 @@
     <a href="{{ route('utilisateurs.index') }}">Utilisateurs</a>
     <a href="{{ route('observations.index') }}">Observations</a>
     <a href="{{ route('complexes.index') }}">Complexes</a>
-    <a href="{{ route('efps.index') }}">Établissements</a>
     <a href="{{ route('direction_regionales.index') }}">Directions Régionales</a>
 </div>
 

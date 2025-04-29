@@ -5,7 +5,6 @@
     <title>Détails de l'anomalie</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     @extends('layouts.app')
-
 </head>
 <body class="bg-light">
 
@@ -16,10 +15,10 @@
             <div class="card-body">
                 <p><strong>Cause de l'anomalie :</strong> {{ $anomalie->cause_anomalie }}</p>
                 <p><strong>Action corrective :</strong> {{ $anomalie->action_corrective }}</p>
-                <p><strong>Date de signalement :</strong> {{ $anomalie->date_signalement }}</p>
-                <p><strong>Date de remise :</strong> {{ $anomalie->date_remise ?? 'Non renseignée' }}</p>
+                <p><strong>Date de signalement :</strong> {{ \Carbon\Carbon::parse($anomalie->date_signalement)->format('d/m/Y H:i') }}</p>
+                <p><strong>Date de remise :</strong> {{ $anomalie->date_remise ? \Carbon\Carbon::parse($anomalie->date_remise)->format('d/m/Y H:i') : 'Non renseignée' }}</p>
                 <p><strong>Durée de la panne :</strong> {{ $anomalie->duree_panne }} heures</p>
-                <p><strong>Coût de réparation :</strong> {{ $anomalie->cout_reparation }} MAD</p>
+                <p><strong>Coût de réparation :</strong> {{ number_format($anomalie->cout_reparation, 2, ',', ' ') }} MAD</p>
                 <p><strong>Résolue :</strong> 
                     @if($anomalie->anomalie_resolue)
                         ✅ Oui
@@ -28,7 +27,7 @@
                     @endif
                 </p>
                 <p><strong>Pièces de rechange :</strong> {{ $anomalie->pieces_rechange ?? 'Aucune' }}</p>
-                <p><strong>ID de l'utilisateur :</strong> {{ $anomalie->id_user }}</p>
+                <p><strong>Responsable :</strong> {{ $anomalie->user->nom_user ?? 'Inconnu' }}</p>
             </div>
         </div>
 
