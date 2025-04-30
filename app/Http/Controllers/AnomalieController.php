@@ -24,6 +24,8 @@ class AnomalieController extends Controller
             'duree_panne' => 'required|integer',
             'cout_reparation' => 'required|numeric',
             'anomalie_resolue' => 'required|boolean',
+            'pieces_rechange' => 'nullable|string',
+            'id_user' => 'required|exists:utilisateurs,id'
         ]);
 
         Anomalie::create($request->all());
@@ -69,13 +71,7 @@ class AnomalieController extends Controller
         $anomalie = Anomalie::findOrFail($id);
         $anomalie->delete();
         
-        return response()->json([
-            'success' => true,
-            'message' => 'Anomalie supprimée avec succès'
-        ]);
-        
-        // Ou pour une redirection classique :
-        // return redirect()->route('anomalies.index')->with('success', 'Suppression réussie');
+        return redirect()->route('anomalies.index')->with('success', 'Suppression réussie');
         
     } catch (\Exception $e) {
         return response()->json([
@@ -83,8 +79,6 @@ class AnomalieController extends Controller
             'message' => 'Erreur lors de la suppression: ' . $e->getMessage()
         ], 500);
         
-        // Ou pour une redirection classique :
-        // return back()->with('error', 'Erreur lors de la suppression');
     }
 }
 }

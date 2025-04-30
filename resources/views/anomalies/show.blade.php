@@ -27,7 +27,7 @@
                     @endif
                 </p>
                 <p><strong>Pièces de rechange :</strong> {{ $anomalie->pieces_rechange ?? 'Aucune' }}</p>
-                <p><strong>Responsable :</strong> {{ $anomalie->user->nom_user ?? 'Inconnu' }}</p>
+                <p><strong>Responsable :</strong> {{ $anomalie->utilisateur->nom_user ?? 'Inconnu' }}</p>
             </div>
         </div>
 

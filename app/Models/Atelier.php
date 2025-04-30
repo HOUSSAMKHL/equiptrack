@@ -10,6 +10,7 @@ class Atelier extends Model
     use HasFactory;
 
     protected $table = 'ateliers';
+    public $timestamps = false;
 
     protected $fillable = [
         'numero_atelier',

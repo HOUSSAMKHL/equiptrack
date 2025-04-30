@@ -1,11 +1,13 @@
+@extends('layouts.app')
+
+@section('content')
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier l'Atelier</title>
-    @extends('layouts.app')
-
+    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
 </head>
 <body>
     <h1>Modifier l'Atelier</h1>
@@ -19,7 +21,7 @@
         <div>
             <label for="id_etablissement">Établissement :</label>
             <select name="id_etablissement" id="id_etablissement" required>
-                @foreach ($etablissements as $etablissement)
+                @foreach ($Efp as $etablissement)
                     <option value="{{ $etablissement->id }}" {{ $atelier->id_etablissement == $etablissement->id ? 'selected' : '' }}>
                         {{ $etablissement->nom_etablissement }}
                     </option>
@@ -32,3 +34,4 @@
     </form>
 </body>
 </html>
+@endsection

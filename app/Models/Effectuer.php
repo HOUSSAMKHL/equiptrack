@@ -10,6 +10,7 @@ class Effectuer extends Model
     use HasFactory;
 
     protected $table = 'effectuer';
+    public $timestamps = false;
 
     protected $fillable = [
         'id_user',

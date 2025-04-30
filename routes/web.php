@@ -21,12 +21,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('anomalies', AnomalieController::class);
+Route::resource('anomalies', AnomalieController::class)->parameters([
+    'anomalies' => 'anomalie'
+]);
 Route::resource('utilisateurs', UtilisateurController::class);
 Route::resource('roles', RoleController::class);
 Route::resource('operations', OperationController::class);
 Route::resource('frequences', FrequenceController::class);
-Route::resource('categories', CategorieController::class);
+Route::resource('categories', CategorieController::class)->parameters([
+    'categories' => 'categorie'
+]);
 Route::resource('equipements_identifies', EquipementIdentifieController::class);
 Route::resource('equipements_tracables', EquipementTracableController::class);
 Route::resource('intervenants', IntervenantController::class);
@@ -36,5 +40,7 @@ Route::resource('observations', ObservationController::class);
 Route::resource('effectuers', EffectuerController::class);
 Route::resource('efps', EfpController::class);
 Route::resource('complexes', ComplexeController::class);
+
+
 
 

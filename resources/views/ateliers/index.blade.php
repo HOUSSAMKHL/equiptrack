@@ -103,7 +103,7 @@
                         <td class="actions">
                             <a href="{{ route('ateliers.show', $atelier->id) }}" class="btn info">Voir</a>
                             <a href="{{ route('ateliers.edit', $atelier->id) }}" class="btn warning">Modifier</a>
-                            <form action="{{ route('ateliers.destroy', $atelier->id) }}" method="POST" class="inline-form">
+                            <form action="{{ route('ateliers.destroy', $atelier) }}" method="POST" class="inline-form" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn danger">Supprimer</button>
