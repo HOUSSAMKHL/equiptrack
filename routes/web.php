@@ -31,15 +31,23 @@ Route::resource('frequences', FrequenceController::class);
 Route::resource('categories', CategorieController::class)->parameters([
     'categories' => 'categorie'
 ]);
-Route::resource('equipements_identifies', EquipementIdentifieController::class);
-Route::resource('equipements_tracables', EquipementTracableController::class);
+Route::resource('equipements_identifies', EquipementIdentifieController::class)->parameters([
+    'equipements_identifies' => 'equipementIdentifie'
+]); 
+Route::resource('equipements_tracables', EquipementTracableController::class)->parameters([
+    'equipements_tracables' => 'equipementTracable'
+]);
 Route::resource('intervenants', IntervenantController::class);
 Route::resource('ateliers', AtelierController::class);
-Route::resource('direction_regionales', DirectionRegionaleController::class);
+Route::resource('direction_regionales', DirectionRegionaleController::class)->parameters([
+    'direction_regionales' => 'directionRegionale'
+]);
 Route::resource('observations', ObservationController::class);
 Route::resource('effectuers', EffectuerController::class);
 Route::resource('efps', EfpController::class);
-Route::resource('complexes', ComplexeController::class);
+Route::resource('complexes', ComplexeController::class)->parameters([
+    'complexes' => 'complexe'
+]);
 
 
 

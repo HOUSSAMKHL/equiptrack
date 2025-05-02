@@ -1,10 +1,12 @@
+@extends('layouts.app')
+@section('content')
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Créer une Fréquence</title>
-    @extends('layouts.app')
+    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
 
 </head>
 <body>
@@ -21,3 +23,4 @@
     <a href="{{ route('frequences.index') }}">Retour à la liste des fréquences</a>
 </body>
 </html>
+@endsection

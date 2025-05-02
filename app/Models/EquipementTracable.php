@@ -10,6 +10,7 @@ class EquipementTracable extends Model
     use HasFactory;
 
     protected $table = 'equipement_tracables';
+    public $timestamps = false;
 
     protected $fillable = [
         'statut',

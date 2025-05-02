@@ -10,7 +10,7 @@ class Efp extends Model
     use HasFactory;
 
     protected $table = 'efps';
-
+   public $timestamps = false;
     protected $fillable = [
         'nom_etablissement',
         'adresse',

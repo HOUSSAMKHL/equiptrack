@@ -1,11 +1,13 @@
+@extends('layouts.app')
+@section('content')
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier l'Opération</title>
-    @extends('layouts.app')
-
+ 
+    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
 </head>
 <body>
     <h1>Modifier l'Opération</h1>
@@ -22,3 +24,4 @@
     <a href="{{ route('operations.index') }}">Retour à la liste des opérations</a>
 </body>
 </html>
+@endsection

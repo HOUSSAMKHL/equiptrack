@@ -1,11 +1,12 @@
+@extends('layouts.app')
+@section('content')
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier un Équipement Tracable</title>
-    @extends('layouts.app')
-
+    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
 </head>
 <body>
     <h1>Modifier un Équipement Tracable</h1>
@@ -29,13 +30,13 @@
         <label for="id_atelier">Atelier</label>
         <select name="id_atelier" id="id_atelier" required>
             @foreach($ateliers as $atelier)
-                <option value="{{ $atelier->id }}" {{ old('id_atelier', $equipementTracable->id_atelier) == $atelier->id ? 'selected' : '' }}>{{ $atelier->nom_atelier }}</option>
+                <option value="{{ $atelier->id }}" {{ old('id_atelier', $equipementTracable->id_atelier) == $atelier->id ? 'selected' : '' }}>{{ $atelier->numero_atelier }}</option>
             @endforeach
         </select>
 
         <label for="id_equipement">Équipement Identifié</label>
         <select name="id_equipement" id="id_equipement" required>
-            @foreach($equipements_identifies as $equipement)
+            @foreach($equipementIdentifie as $equipement)
                 <option value="{{ $equipement->id }}" {{ old('id_equipement', $equipementTracable->id_equipement) == $equipement->id ? 'selected' : '' }}>{{ $equipement->nom_equipement }}</option>
             @endforeach
         </select>
@@ -45,3 +46,4 @@
 
 </body>
 </html>
+@endsection

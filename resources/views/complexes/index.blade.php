@@ -115,7 +115,7 @@
                 @foreach($complexes as $complexe)
                     <tr>
                         <td>{{ $complexe->nom_complexe }}</td>
-                        <td>{{ $complexe->directionRegionale->nom_direction_regionale ?? 'Non assignée' }}</td>
+                        <td>{{ $complexe->DirectionRegionale->Nom_DR ?? 'Non assignée' }}</td>
                         <td class="actions">
                             <a href="{{ route('complexes.show', $complexe->id) }}" class="btn info">Voir</a>
                             <a href="{{ route('complexes.edit', $complexe->id) }}" class="btn warning">Modifier</a>

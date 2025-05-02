@@ -1,11 +1,12 @@
+@extends('layouts.app')
+@section('content')
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter un Intervenant</title>
-    @extends('layouts.app')
-
+    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
 </head>
 <body>
     <h1>Ajouter un Intervenant</h1>
@@ -29,3 +30,4 @@
     <a href="{{ route('intervenants.index') }}">Retour à la liste des intervenants</a>
 </body>
 </html>
+@endsection

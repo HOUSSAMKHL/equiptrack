@@ -2,22 +2,67 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détails de l'Équipement Tracable</title>
+    <title>Détails de l'Équipement Traçable</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     @extends('layouts.app')
-
 </head>
-<body>
-    <h1>Détails de l'Équipement Tracable</h1>
+<body class="bg-light">
 
-    <p><strong>ID:</strong> {{ $equipementTracable->id }}</p>
-    <p><strong>Statut:</strong> {{ $equipementTracable->statut }}</p>
-    <p><strong>Référence:</strong> {{ $equipementTracable->reference }}</p>
-    <p><strong>Année d'acquisition:</strong> {{ $equipementTracable->annee_dacquisition }}</p>
-    <p><strong>Valeur d'acquisition:</strong> {{ $equipementTracable->valeur_dacquisition }}</p>
-    <p><strong>Atelier:</strong> {{ $equipementTracable->atelier->nom_atelier }}</p>
-    <p><strong>Équipement Identifié:</strong> {{ $equipementTracable->equipement->nom_equipement }}</p>
+    <div class="container py-5">
+        <h1 class="mb-4">Détails de l'Équipement Traçable</h1>
 
-    <a href="{{ route('equipements_tracables.index') }}">Retour à la liste</a>
+        <div class="card shadow-sm mb-4">
+            
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="mb-3"><strong>ID:</strong> {{ $equipementTracable->id }}</p>
+                        <p class="mb-3"><strong>Statut:</strong> 
+                            <span class="badge bg-{{ $equipementTracable->statut === 'actif' ? 'success' : 'warning' }}">
+                                {{ $equipementTracable->statut }}
+                            </span>
+                        </p>
+                        <p class="mb-3"><strong>Référence:</strong> {{ $equipementTracable->reference ?? 'Non renseignée' }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-3"><strong>Année d'acquisition:</strong> {{ $equipementTracable->annee_dacquisition ?? 'Non renseignée' }}</p>
+                        <p class="mb-3"><strong>Valeur d'acquisition:</strong> 
+                            {{ $equipementTracable->valeur_dacquisition ? number_format($equipementTracable->valeur_dacquisition, 2, ',', ' ') . ' MAD' : 'Non renseignée' }}
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-3"><strong>Atelier:</strong> 
+                            @if($equipementTracable->atelier)
+                                {{ $equipementTracable->atelier->numero_atelier }}
+                            @else
+                                <span class="text-muted">Aucun atelier associé</span>
+                            @endif
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-3"><strong>Équipement Identifié:</strong> 
+                            @if($equipementTracable->equipementIdentifie)
+                                {{ $equipementTracable->equipementIdentifie->nom_equipement }}
+                            @else
+                                <span class="text-muted">Aucun équipement identifié associé</span>
+                            @endif
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <a href="{{ route('equipements_tracables.index') }}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Retour à la liste
+            </a>
+            <a href="{{ route('equipements_tracables.edit', $equipementTracable->id) }}" class="btn btn-primary">
+                <i class="bi bi-pencil"></i> Modifier
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

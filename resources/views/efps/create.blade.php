@@ -1,11 +1,12 @@
+@extends('layouts.app')
+@section('content')
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter un EFP</title>
-    @extends('layouts.app')
-
+    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
 </head>
 <body>
     <h1>Ajouter un EFP</h1>
@@ -33,6 +34,6 @@
         <button type="submit">Ajouter</button>
     </form>
 
-    <a href="{{ route('efps.index') }}">Retour à la liste des EFPs</a>
 </body>
 </html>
+@endsection

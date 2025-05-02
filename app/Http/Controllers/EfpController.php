@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Efp;
 use Illuminate\Http\Request;
+use App\Models\Complexe;
 
 class EfpController extends Controller
 {
@@ -13,7 +14,8 @@ class EfpController extends Controller
     }
 
     public function create() {
-        return view('Efps.create');
+        $complexes = Complexe::all(); 
+        return view('Efps.create', compact('complexes'));
     }
 
     public function store(Request $request) {
@@ -26,7 +28,7 @@ class EfpController extends Controller
         ]);
 
         Efp::create($request->all());
-        return redirect()->route('Efps.index')->with('success', 'Efp créé avec succès.');
+        return redirect()->route('efps.index')->with('success', 'Efp créé avec succès.');
     }
 
     public function show(Efp $Efp) {
@@ -34,7 +36,8 @@ class EfpController extends Controller
     }
 
     public function edit(Efp $Efp) {
-        return view('Efps.edit', compact('Efp'));
+        $complexes = Complexe::all();
+        return view('Efps.edit', compact('Efp', 'complexes'));
     }
 
     public function update(Request $request, Efp $Efp) {
@@ -46,7 +49,7 @@ class EfpController extends Controller
             'id_complexe' => 'required|exists:complexes,id',
         ]);
         $Efp->update($request->all());
-        return redirect()->route('Efps.index')->with('success', 'Efp mis à jour avec succès.');
+        return redirect()->route('efps.index')->with('success', 'Efp mis à jour avec succès.');
     }
 
     public function destroy(Efp $Efp) {

@@ -10,6 +10,7 @@ class Operation extends Model
     use HasFactory;
 
     protected $table = 'operations';
+    public $timestamps = false;
 
     protected $fillable = [
         'nom_operation',

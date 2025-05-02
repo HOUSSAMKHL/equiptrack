@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\EquipementTracable;
 use Illuminate\Http\Request;
+use App\Models\Atelier;
+use App\Models\EquipementIdentifie;
 
 class EquipementTracableController extends Controller
 {
@@ -14,7 +16,9 @@ class EquipementTracableController extends Controller
     
 
     public function create() {
-        return view('equipements_tracables.create');
+        $ateliers = Atelier::all();
+        $equipementIdentifie = EquipementIdentifie::all();
+        return view('equipements_tracables.create', compact('ateliers', 'equipementIdentifie'));
     }
 
     public function store(Request $request) {
@@ -31,12 +35,19 @@ class EquipementTracableController extends Controller
         return redirect()->route('equipements_tracables.index')->with('success', 'Équipement tracable créé avec succès.');
     }
 
-    public function show(EquipementTracable $equipementTracable) {
+    public function show($id)
+    {
+        $equipementTracable = EquipementTracable::with(['atelier', 'equipementIdentifie'])
+                          ->findOrFail($id);
+        
         return view('equipements_tracables.show', compact('equipementTracable'));
     }
+    
 
     public function edit(EquipementTracable $equipementTracable) {
-        return view('equipements_tracables.edit', compact('equipementTracable'));
+        $ateliers = Atelier::all();
+        $equipementIdentifie = EquipementIdentifie::all();
+        return view('equipements_tracables.edit', compact('equipementTracable', 'ateliers', 'equipementIdentifie'));
     }
 
     public function update(Request $request, EquipementTracable $equipementTracable) {
@@ -46,7 +57,7 @@ class EquipementTracableController extends Controller
             'annee_dacquisition' => 'required|date_format:Y',
             'valeur_dacquisition' => 'required|numeric',
             'id_atelier' => 'required|exists:ateliers,id',
-            'id_equipement' => 'required|exists:equipements,id',
+            'id_equipement' => 'required|exists:equipement_identifies,id',
         ]);
         
         $equipementTracable->update($request->all());

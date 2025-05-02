@@ -2,17 +2,60 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Détails de l'Intervenant</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     @extends('layouts.app')
-
 </head>
-<body>
-    <h1>Détails de l'Intervenant</h1>
-    <p><strong>ID:</strong> {{ $intervenant->id }}</p>
-    <p><strong>Nom:</strong> {{ $intervenant->nom_intervenant }}</p>
-    <p><strong>Numéro:</strong> {{ $intervenant->numero }}</p>
-    <p><strong>Société:</strong> {{ $intervenant->societe }}</p>
-    <a href="{{ route('intervenants.index') }}">Retour à la liste des intervenants</a>
+<body class="bg-light">
+
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="h4 mb-0"><i class="bi bi-person-badge me-2"></i>Fiche Intervenant</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    <h3 class="h6 text-muted mb-3">Informations générales</h3>
+                                    <p><strong class="d-block text-muted small">ID</strong>
+                                    <span class="fs-5">{{ $intervenant->id }}</span></p>
+                                    
+                                    <p><strong class="d-block text-muted small">Nom complet</strong>
+                                    <span class="fs-5">{{ $intervenant->nom_intervenant }}</span></p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    <h3 class="h6 text-muted mb-3">Coordonnées</h3>
+                                    <p><strong class="d-block text-muted small">Téléphone</strong>
+                                    <span class="fs-5">{{ $intervenant->numero ?? 'Non renseigné' }}</span></p>
+                                    
+                                    <p><strong class="d-block text-muted small">Société</strong>
+                                    <span class="fs-5">{{ $intervenant->societe ?? 'Non renseignée' }}</span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between border-top pt-4 mt-3">
+                            <a href="{{ route('intervenants.index') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Retour à la liste
+                            </a>
+                            <div>
+                                <a href="{{ route('intervenants.edit', $intervenant->id) }}" class="btn btn-primary me-2">
+                                    <i class="bi bi-pencil me-2"></i>Modifier
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

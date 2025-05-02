@@ -10,6 +10,7 @@ class Intervenant extends Model
     use HasFactory;
 
     protected $table = 'intervenants';
+    public $timestamps = false; 
 
     protected $fillable = [
         'nom_intervenant',

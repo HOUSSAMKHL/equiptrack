@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Utilisateur;
 use Illuminate\Http\Request;
+use App\Models\Role;
 
 class UtilisateurController extends Controller
 {
@@ -13,7 +14,8 @@ class UtilisateurController extends Controller
     }
 
     public function create() {
-        return view('utilisateurs.create');
+        $roles = Role::all();
+        return view('utilisateurs.create', compact('roles'));
     }
 
     public function store(Request $request) {
@@ -35,7 +37,8 @@ class UtilisateurController extends Controller
     }
 
     public function edit(Utilisateur $utilisateur) {
-        return view('utilisateurs.edit', compact('utilisateur'));
+        $roles = Role::all();
+        return view('utilisateurs.edit', compact('utilisateur', 'roles'));
     }
 
     public function update(Request $request, Utilisateur $utilisateur) {

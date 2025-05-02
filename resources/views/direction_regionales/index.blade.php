@@ -97,7 +97,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($directions as $direction)
+                @foreach($directionRegionale as $direction)
                     <tr>
                         <td>{{ $direction->id }}</td>
                         <td>{{ $direction->Nom_DR }}</td>

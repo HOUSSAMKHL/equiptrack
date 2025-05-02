@@ -10,6 +10,7 @@ class Utilisateur extends Model
     use HasFactory;
 
     protected $table = 'utilisateurs';
+    public $timestamps = false;
 
     protected $fillable = [
         'nom_user',

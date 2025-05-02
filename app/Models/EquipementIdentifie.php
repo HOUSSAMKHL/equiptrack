@@ -10,6 +10,7 @@ class EquipementIdentifie extends Model
     use HasFactory;
 
     protected $table = 'equipement_identifies';
+    public $timestamps = false;
 
     protected $fillable = [
         'nom_equipement',

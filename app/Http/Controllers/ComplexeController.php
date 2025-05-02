@@ -4,28 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Complexe;
 use Illuminate\Http\Request;
+use App\Models\DirectionRegionale;
 
 class ComplexeController extends Controller
 {
     public function index() {
-        // Charger la relation directionRegionale
-        $complexes = Complexe::with('directionRegionale')->get();
-    
-        // Vérifier si la relation existe pour chaque complexe
-        foreach ($complexes as $complexe) {
-            if (!$complexe->directionRegionale) {
-                // Gérer le cas où il n'y a pas de direction régionale associée
-                // Par exemple, vous pouvez définir une valeur par défaut ou laisser vide
-                $complexe->directionRegionale = (object) ['nom_direction_regionale' => 'Non assignée'];
-            }
-        }
-    
+        $complexes = Complexe::with('directionRegionale')->get();    
         return view('complexes.index', compact('complexes'));
     }
     
 
     public function create() {
-        return view('complexes.create');
+        $directionRegionale = DirectionRegionale::all();
+
+        return view('complexes.create', compact('directionRegionale'));
     }
 
     public function store(Request $request) {
@@ -43,7 +35,8 @@ class ComplexeController extends Controller
     }
 
     public function edit(Complexe $complexe) {
-        return view('complexes.edit', compact('complexe'));
+        $directionRegionale = DirectionRegionale::all();
+        return view('complexes.edit', compact('complexe', 'directionRegionale'));
     }
 
     public function update(Request $request, Complexe $complexe) {
@@ -52,11 +45,11 @@ class ComplexeController extends Controller
             'id_DR' => 'required|exists:direction_regionales,id',
         ]);
         $complexe->update($request->all());
-        return redirect()->route('complexe.index')->with('success', 'Complexe mis à jour.');
+        return redirect()->route('complexes.index')->with('success', 'Complexe mis à jour.');
     }
 
     public function destroy(Complexe $complexe) {
         $complexe->delete();
-        return redirect()->route('complexe.index')->with('success', 'Complexe supprimé avec succès.');
+        return redirect()->route('complexes.index')->with('success', 'Complexe supprimé avec succès.');
     }
 }

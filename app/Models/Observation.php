@@ -10,6 +10,7 @@ class Observation extends Model
     use HasFactory;
 
     protected $table = 'observations';
+    public $timestamps = false;
 
     protected $fillable = [
         'description_panne',

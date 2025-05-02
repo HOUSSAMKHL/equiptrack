@@ -1,10 +1,11 @@
+@extends('layouts.app')
+@section('content')
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Ajouter une anomalie</title>
     <link rel="stylesheet" href="{{ asset('css/form.css') }}">
-    @extends('layouts.app')
 </head>
 <body>
 
@@ -68,3 +69,4 @@
 
 </body>
 </html>
+@endsection

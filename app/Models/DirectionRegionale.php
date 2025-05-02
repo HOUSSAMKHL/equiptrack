@@ -10,6 +10,7 @@ class DirectionRegionale extends Model
     use HasFactory;
 
     protected $table = 'direction_regionales';
+    public $timestamps = false;
 
     protected $fillable = [
         'Nom_DR',  // Remplace par le champ exact si nécessaire

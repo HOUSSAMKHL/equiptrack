@@ -4,39 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Détails du Complexe</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     @extends('layouts.app')
-
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-    </style>
 </head>
-<body>
-    <h1>Détails du Complexe</h1>
-    
-    <table>
-        <tr>
-            <th>Nom du Complexe</th>
-            <td>{{ $complexe->nom_complexe }}</td>
-        </tr>
-        @if($complexe->directionRegionale)
-            <p><strong>Direction Régionale :</strong> {{ $complexe->directionRegionale->nom_direction_regionale }}</p>
-        @else
-            <p>Aucune direction régionale associée</p>
-        @endif
+<body class="bg-light">
 
-    </table>
-    
-    <a href="{{ route('complexes.index') }}">Retour à la liste des complexes</a>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="h4 mb-0"><i class="bi bi-building me-2"></i>Détails du Complexe</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <h3 class="h6 text-muted mb-3">Informations sur le complexe</h3>
+
+                            <p><strong class="d-block text-muted small">Nom du Complexe</strong>
+                            <span class="fs-5">{{ $complexe->nom_complexe }}</span></p>
+
+                            <p><strong class="d-block text-muted small">Direction Régionale</strong>
+                            <span class="fs-5">
+                                @if($complexe->DirectionRegionale)
+                                    {{ $complexe->DirectionRegionale->Nom_DR }}
+                                @else
+                                    <em>Aucune direction régionale associée</em>
+                                @endif
+                            </span></p>
+                        </div>
+
+                        <div class="d-flex justify-content-between border-top pt-4 mt-3">
+                            <a href="{{ route('complexes.index') }}" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Retour à la liste
+                            </a>
+                            <div>
+                                <a href="{{ route('complexes.edit', $complexe->id) }}" class="btn btn-primary me-2">
+                                    <i class="bi bi-pencil me-2"></i>Modifier
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

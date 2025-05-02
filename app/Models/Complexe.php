@@ -10,6 +10,7 @@ class Complexe extends Model
     use HasFactory;
 
     protected $table = 'complexes';
+    public $timestamps = false;
 
     protected $fillable = [
         'nom_complexe',
