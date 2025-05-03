@@ -26,8 +26,8 @@ Route::resource('anomalies', AnomalieController::class)->parameters([
 ]);
 Route::resource('utilisateurs', UtilisateurController::class);
 Route::resource('roles', RoleController::class);
-Route::resource('operations', OperationController::class);
 Route::resource('frequences', FrequenceController::class);
+Route::resource('operations', OperationController::class);
 Route::resource('categories', CategorieController::class)->parameters([
     'categories' => 'categorie'
 ]);
