@@ -39,6 +39,10 @@
                             <p><strong class="d-block text-muted small">Adresse</strong>
                             <span class="fs-5">{{ $utilisateur->adresse }}</span></p>
 
+                            <p><strong class="d-block text-muted small">mot de passe</strong>
+                            <span class="fs-5">{{ $utilisateur->password }}</span>
+                            </p>
+
                             <p><strong class="d-block text-muted small">Rôle</strong>
                             <span class="fs-5">{{ $utilisateur->role->nom_role }}</span></p>
                         </div>

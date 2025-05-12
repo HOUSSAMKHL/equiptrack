@@ -1,10 +1,10 @@
-<?php
-
+<?php 
 namespace App\Http\Controllers;
 
 use App\Models\Utilisateur;
 use Illuminate\Http\Request;
 use App\Models\Role;
+use Illuminate\Support\Facades\Hash; // Import Hash facade
 
 class UtilisateurController extends Controller
 {
@@ -25,10 +25,16 @@ class UtilisateurController extends Controller
             'telephone' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'adresse' => 'required|string|max:255',
-            'id_roles' => 'required|exists:roles,id',  // Assurez-vous que le rôle existe dans la table roles
+            'password' => 'required|string|min:8',
+            'id_roles' => 'required|exists:roles,id',
         ]);
 
-        Utilisateur::create($request->all());
+        // Prepare data for creation
+        $data = $request->all();
+        $data['password'] = Hash::make($data['password']); // Hash password here
+
+        Utilisateur::create($data);
+
         return redirect()->route('utilisateurs.index')->with('success', 'Utilisateur créé avec succès.');
     }
 
@@ -41,19 +47,32 @@ class UtilisateurController extends Controller
         return view('utilisateurs.edit', compact('utilisateur', 'roles'));
     }
 
-    public function update(Request $request, Utilisateur $utilisateur) {
-        $request->validate([
-            'nom_user' => 'required|string|max:255',
-            'age' => 'required|integer',
-            'telephone' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'adresse' => 'required|string|max:255',
-            'id_roles' => 'required|exists:roles,id',  // Assurez-vous que le rôle existe dans la table roles
-        ]);
+   public function update(Request $request, Utilisateur $utilisateur) {
+    $request->validate([
+        'nom_user' => 'required|string|max:255',
+        'age' => 'required|integer',
+        'telephone' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'adresse' => 'required|string|max:255',
+        'password' => 'nullable|string|min:8',
+        'id_roles' => 'required|exists:roles,id',
+    ]);
 
-        $utilisateur->update($request->all());
-        return redirect()->route('utilisateurs.index')->with('success', 'Utilisateur mis à jour avec succès.');
+    $data = $request->all();
+
+    if (!empty($data['password'])) {
+        // Hasher le nouveau mot de passe
+        $data['password'] = Hash::make($data['password']);
+    } else {
+        // Ne pas écraser le mot de passe existant si aucun nouveau mot de passe fourni
+        unset($data['password']);
     }
+
+    $utilisateur->update($data);
+
+    return redirect()->route('utilisateurs.index')->with('success', 'Utilisateur mis à jour avec succès.');
+}
+
 
     public function destroy(Utilisateur $utilisateur) {
         $utilisateur->delete();

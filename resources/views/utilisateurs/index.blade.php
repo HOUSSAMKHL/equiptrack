@@ -92,6 +92,7 @@
                     <th>Téléphone</th>
                     <th>Email</th>
                     <th>Adresse</th>
+                    <th>Mot de passe</th>
                     <th>Rôle</th>
                     <th>Actions</th>
                 </tr>
@@ -105,6 +106,7 @@
                         <td>{{ $utilisateur->telephone }}</td>
                         <td>{{ $utilisateur->email }}</td>
                         <td>{{ $utilisateur->adresse }}</td>
+                        <td>{{ $utilisateur->password }}</td>
                         <td>{{ $utilisateur->role->nom_role }}</td>
                         <td>
                             <a href="{{ route('utilisateurs.show', $utilisateur->id) }}" class="btn info">Voir</a> |

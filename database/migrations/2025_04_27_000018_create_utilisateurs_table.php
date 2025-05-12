@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('telephone');
             $table->string('email');
             $table->string('adresse');
+            $table->string('password');
             $table->foreignId('id_roles')->constrained('roles');
         });
         
