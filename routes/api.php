@@ -17,6 +17,12 @@ use App\Http\Controllers\EfpController;
 use App\Http\Controllers\ComplexeController;
 use App\Http\Controllers\AnomalieController;
 
+
+Route::get('/test-api', function () {
+    return response()->json(['message' => 'API OK']);
+});
+
+
 Route::apiResource('anomalies', AnomalieController::class)->parameters([
     'anomalies' => 'anomalie'
 ]);
