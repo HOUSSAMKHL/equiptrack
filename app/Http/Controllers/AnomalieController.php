@@ -7,17 +7,15 @@ use Illuminate\Http\Request;
 
 class AnomalieController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $anomalies = Anomalie::with('utilisateur')->get();
-        return view('anomalies.index', compact('anomalies'));
+        return response()->json($anomalies, 200);
     }
 
-    public function create() {
-        return view('anomalies.create');
-    }
-
-    public function store(Request $request) {
-        $request->validate([
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
             'cause_anomalie' => 'required|string',
             'action_corrective' => 'required|string',
             'date_signalement' => 'required|date',
@@ -28,23 +26,23 @@ class AnomalieController extends Controller
             'id_user' => 'required|exists:utilisateurs,id'
         ]);
 
-        Anomalie::create($request->all());
-        return redirect()->route('anomalies.index')->with('success', 'Anomalie signalée avec succès.');
+        $anomalie = Anomalie::create($validated);
+
+        return response()->json([
+            'message' => 'Anomalie créée avec succès',
+            'anomalie' => $anomalie
+        ], 201);
     }
 
-    public function show(Anomalie $anomalie) {
-        return view('anomalies.show', compact('anomalie'));
-    }
-
-    public function edit($anomalie)
+    public function show(Anomalie $anomalie)
     {
-        $anomalie = Anomalie::find($anomalie);
-        return view('anomalies.edit', compact('anomalie'));
+        return response()->json($anomalie, 200);
     }
-    
-    public function update(Request $request, $id) {
-        $anomalie = Anomalie::find($id);
-        
+
+    public function update(Request $request, $id)
+    {
+        $anomalie = Anomalie::findOrFail($id);
+
         $validated = $request->validate([
             'cause_anomalie' => 'required|string',
             'action_corrective' => 'required|string',
@@ -54,31 +52,24 @@ class AnomalieController extends Controller
             'cout_reparation' => 'required|numeric',
             'anomalie_resolue' => 'required|boolean',
             'pieces_rechange' => 'nullable|string',
-            'id_user' => 'required|exists:users,id'
+            'id_user' => 'required|exists:utilisateurs,id'
         ]);
-        
-        if ($anomalie->update($validated)) {
-            return redirect()->route('anomalies.index')
-                   ->with('success', 'Anomalie mise à jour avec succès');
-        }
-        
-        return back()->with('error', 'Échec de la mise à jour');
+
+        $anomalie->update($validated);
+
+        return response()->json([
+            'message' => 'Anomalie mise à jour avec succès',
+            'anomalie' => $anomalie
+        ], 200);
     }
 
     public function destroy($id)
-{
-    try {
+    {
         $anomalie = Anomalie::findOrFail($id);
         $anomalie->delete();
-        
-        return redirect()->route('anomalies.index')->with('success', 'Suppression réussie');
-        
-    } catch (\Exception $e) {
+
         return response()->json([
-            'success' => false,
-            'message' => 'Erreur lors de la suppression: ' . $e->getMessage()
-        ], 500);
-        
+            'message' => 'Anomalie supprimée avec succès'
+        ], 204);
     }
-}
 }

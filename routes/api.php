@@ -17,38 +17,33 @@ use App\Http\Controllers\EfpController;
 use App\Http\Controllers\ComplexeController;
 use App\Http\Controllers\AnomalieController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::resource('anomalies', AnomalieController::class)->parameters([
+Route::apiResource('anomalies', AnomalieController::class)->parameters([
     'anomalies' => 'anomalie'
 ]);
-Route::resource('utilisateurs', UtilisateurController::class);
-Route::resource('roles', RoleController::class);
-Route::resource('frequences', FrequenceController::class);
-Route::resource('operations', OperationController::class);
-Route::resource('categories', CategorieController::class)->parameters([
+Route::apiResource('utilisateurs', UtilisateurController::class);
+Route::apiResource('roles', RoleController::class);
+Route::apiResource('frequences', FrequenceController::class);
+Route::apiResource('operations', OperationController::class);
+Route::apiResource('categories', CategorieController::class)->parameters([
     'categories' => 'categorie'
 ]);
-Route::resource('equipements_identifies', EquipementIdentifieController::class)->parameters([
+Route::apiResource('equipements_identifies', EquipementIdentifieController::class)->parameters([
     'equipements_identifies' => 'equipementIdentifie'
-]); 
-Route::resource('equipements_tracables', EquipementTracableController::class)->parameters([
+]);
+Route::apiResource('equipements_tracables', EquipementTracableController::class)->parameters([
     'equipements_tracables' => 'equipementTracable'
 ]);
-Route::resource('intervenants', IntervenantController::class);
-Route::resource('ateliers', AtelierController::class);
-Route::resource('direction_regionales', DirectionRegionaleController::class)->parameters([
+Route::apiResource('intervenants', IntervenantController::class);
+Route::apiResource('ateliers', AtelierController::class);
+Route::apiResource('direction_regionales', DirectionRegionaleController::class)->parameters([
     'direction_regionales' => 'directionRegionale'
 ]);
-Route::resource('observations', ObservationController::class);
-Route::resource('effectuers', EffectuerController::class);
-Route::resource('efps', EfpController::class);
-Route::resource('complexes', ComplexeController::class)->parameters([
+Route::apiResource('observations', ObservationController::class);
+Route::apiResource('effectuers', EffectuerController::class);
+Route::apiResource('efps', EfpController::class);
+Route::apiResource('complexes', ComplexeController::class)->parameters([
     'complexes' => 'complexe'
 ]);
-
-
-
-
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});

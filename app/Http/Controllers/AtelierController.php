@@ -8,45 +8,54 @@ use Illuminate\Http\Request;
 
 class AtelierController extends Controller
 {
-    public function index() {
-        $ateliers = Atelier::with('Efp')->get(); 
-        return view('ateliers.index', compact('ateliers'));
+    public function index()
+    {
+        $ateliers = Atelier::with('efp')->get();
+        return response()->json($ateliers, 200);
     }
 
-    public function create() {
-        $Efps = Efp::all();
-        return view('ateliers.create', compact('Efps'));
-    }
-
-    public function store(Request $request) {
-        $request->validate([
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
             'numero_atelier' => 'required|string|max:255',
             'id_etablissement' => 'required|exists:efps,id',
         ]);
-        Atelier::create($request->all());
-        return redirect()->route('ateliers.index')->with('success', 'Atelier créé avec succès.');
+
+        $atelier = Atelier::create($validated);
+
+        return response()->json([
+            'message' => 'Atelier créé avec succès',
+            'atelier' => $atelier
+        ], 201);
     }
 
-    public function show(Atelier $atelier) {
-        return view('ateliers.show', compact('atelier'));
+    public function show(Atelier $atelier)
+    {
+        $atelier->load('efp');
+        return response()->json($atelier, 200);
     }
 
-    public function edit(Atelier $atelier) {
-        $Efp = Efp::all();
-        return view('ateliers.edit', compact('atelier', 'Efp'));
-    }
-
-    public function update(Request $request, Atelier $atelier) {
-        $request->validate([
+    public function update(Request $request, Atelier $atelier)
+    {
+        $validated = $request->validate([
             'numero_atelier' => 'required|string|max:255',
             'id_etablissement' => 'required|exists:efps,id',
         ]);
-        $atelier->update($request->all());
-        return redirect()->route('ateliers.index')->with('success', 'Atelier mis à jour.');
+
+        $atelier->update($validated);
+
+        return response()->json([
+            'message' => 'Atelier mis à jour avec succès',
+            'atelier' => $atelier
+        ], 200);
     }
 
-    public function destroy(Atelier $atelier) {
+    public function destroy(Atelier $atelier)
+    {
         $atelier->delete();
-        return redirect()->route('ateliers.index')->with('success', 'Atelier supprimé avec succès.');
+
+        return response()->json([
+            'message' => 'Atelier supprimé avec succès'
+        ], 204);
     }
 }

@@ -9,41 +9,44 @@ class FrequenceController extends Controller
 {
     public function index() {
         $frequences = Frequence::all();
-        return view('frequences.index', compact('frequences'));
-    }
-
-    public function create() {
-        return view('frequences.create');
+        return response()->json($frequences, 200);
     }
 
     public function store(Request $request) {
-        $request->validate([
+        $validated = $request->validate([
             'type_frequence' => 'required|string|max:255',
         ]);
 
-        Frequence::create($request->all());
-        return redirect()->route('frequences.index')->with('success', 'Fréquence créée avec succès.');
+        $frequence = Frequence::create($validated);
+
+        return response()->json([
+            'message' => 'Fréquence créée avec succès.',
+            'frequence' => $frequence
+        ], 201);
     }
 
     public function show(Frequence $frequence) {
-        return view('frequences.show', compact('frequence'));
-    }
-
-    public function edit(Frequence $frequence) {
-        return view('frequences.edit', compact('frequence'));
+        return response()->json($frequence, 200);
     }
 
     public function update(Request $request, Frequence $frequence) {
-        $request->validate([
+        $validated = $request->validate([
             'type_frequence' => 'required|string|max:255',
         ]);
 
-        $frequence->update($request->all());
-        return redirect()->route('frequences.index')->with('success', 'Fréquence mise à jour avec succès.');
+        $frequence->update($validated);
+
+        return response()->json([
+            'message' => 'Fréquence mise à jour avec succès.',
+            'frequence' => $frequence
+        ], 200);
     }
 
     public function destroy(Frequence $frequence) {
         $frequence->delete();
-        return redirect()->route('frequences.index')->with('success', 'Fréquence supprimée avec succès.');
+
+        return response()->json([
+            'message' => 'Fréquence supprimée avec succès.'
+        ], 204);
     }
 }

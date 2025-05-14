@@ -31,24 +31,7 @@
 <body>
 
 <!-- Sidebar -->
-<div class="sidebar">
-    <h3 class="text-white text-center">Equip-Track</h3>
-    <a href="{{ route('anomalies.index') }}">Anomalies</a>
-    <a href="{{ route('ateliers.index') }}">Ateliers</a>
-    <a href="{{ route('categories.index') }}">Catégories</a>
-    <a href="{{ route('effectuers.index') }}">Effectuer</a>
-    <a href="{{ route('efps.index') }}">EFPs</a>
-    <a href="{{ route('equipements_identifies.index') }}">Équipements Identifiés</a>
-    <a href="{{ route('equipements_tracables.index') }}">Équipements Traçables</a>
-    <a href="{{ route('frequences.index') }}">Fréquences</a>
-    <a href="{{ route('intervenants.index') }}">Intervenants</a>
-    <a href="{{ route('operations.index') }}">Opérations</a>
-    <a href="{{ route('roles.index') }}">Rôles</a>
-    <a href="{{ route('utilisateurs.index') }}">Utilisateurs</a>
-    <a href="{{ route('observations.index') }}">Observations</a>
-    <a href="{{ route('complexes.index') }}">Complexes</a>
-    <a href="{{ route('direction_regionales.index') }}">Directions Régionales</a>
-</div>
+hi
 
 <!-- Contenu principal -->
 <div class="content container mt-4">

@@ -9,40 +9,43 @@ class ObservationController extends Controller
 {
     public function index() {
         $observations = Observation::all();
-        return view('observations.index', compact('observations'));
-    }
-
-    public function create() {
-        return view('observations.create');
+        return response()->json($observations, 200);
     }
 
     public function store(Request $request) {
-        $request->validate([
+        $validated = $request->validate([
             'description_panne' => 'required|string',
         ]);
 
-        Observation::create($request->all());
-        return redirect()->route('observations.index')->with('success', 'Observation créée avec succès.');
+        $observation = Observation::create($validated);
+
+        return response()->json([
+            'message' => 'Observation créée avec succès.',
+            'observation' => $observation
+        ], 201);
     }
 
     public function show(Observation $observation) {
-        return view('observations.show', compact('observation'));
-    }
-
-    public function edit(Observation $observation) {
-        return view('observations.edit', compact('observation'));
+        return response()->json($observation, 200);
     }
 
     public function update(Request $request, Observation $observation) {
-        $request->validate([
+        $validated = $request->validate([
             'description_panne' => 'required|string',
         ]);
-        $observation->update($request->all());
-        return redirect()->route('observations.index')->with('success', 'Observation mise à jour.');
+
+        $observation->update($validated);
+
+        return response()->json([
+            'message' => 'Observation mise à jour avec succès.',
+            'observation' => $observation
+        ], 200);
     }
 
     public function destroy(Observation $observation) {
         $observation->delete();
-        return redirect()->route('observations.index')->with('success', 'Observation supprimée avec succès.');
+        return response()->json([
+            'message' => 'Observation supprimée avec succès.'
+        ], 204);
     }
 }

@@ -9,41 +9,43 @@ class RoleController extends Controller
 {
     public function index() {
         $roles = Role::all();
-        return view('roles.index', compact('roles'));
-    }
-
-    public function create() {
-        return view('roles.create');
+        return response()->json($roles, 200);
     }
 
     public function store(Request $request) {
-        $request->validate([
+        $validated = $request->validate([
             'nom_role' => 'required|string|max:255',
         ]);
 
-        Role::create($request->all());
-        return redirect()->route('roles.index')->with('success', 'Rôle créé avec succès.');
+        $role = Role::create($validated);
+
+        return response()->json([
+            'message' => 'Rôle créé avec succès.',
+            'role' => $role
+        ], 201);
     }
 
     public function show(Role $role) {
-        return view('roles.show', compact('role'));
-    }
-
-    public function edit(Role $role) {
-        return view('roles.edit', compact('role'));
+        return response()->json($role, 200);
     }
 
     public function update(Request $request, Role $role) {
-        $request->validate([
+        $validated = $request->validate([
             'nom_role' => 'required|string|max:255',
         ]);
 
-        $role->update($request->all());
-        return redirect()->route('roles.index')->with('success', 'Rôle mis à jour avec succès.');
+        $role->update($validated);
+
+        return response()->json([
+            'message' => 'Rôle mis à jour avec succès.',
+            'role' => $role
+        ], 200);
     }
 
     public function destroy(Role $role) {
         $role->delete();
-        return redirect()->route('roles.index')->with('success', 'Rôle supprimé avec succès.');
+        return response()->json([
+            'message' => 'Rôle supprimé avec succès.'
+        ], 204);
     }
 }

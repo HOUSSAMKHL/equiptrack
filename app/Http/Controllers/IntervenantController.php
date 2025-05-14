@@ -9,45 +9,47 @@ class IntervenantController extends Controller
 {
     public function index() {
         $intervenants = Intervenant::all();
-        return view('intervenants.index', compact('intervenants'));
-    }
-
-    public function create() {
-        return view('intervenants.create');
+        return response()->json($intervenants, 200);
     }
 
     public function store(Request $request) {
-        $request->validate([
+        $validated = $request->validate([
             'nom_intervenant' => 'required|string|max:255',
             'numero' => 'required|string|max:255',
             'societe' => 'required|string|max:255',
         ]);
 
-        Intervenant::create($request->all());
-        return redirect()->route('intervenants.index')->with('success', 'Intervenant créé avec succès.');
+        $intervenant = Intervenant::create($validated);
+
+        return response()->json([
+            'message' => 'Intervenant créé avec succès.',
+            'intervenant' => $intervenant
+        ], 201);
     }
 
     public function show(Intervenant $intervenant) {
-        return view('intervenants.show', compact('intervenant'));
-    }
-
-    public function edit(Intervenant $intervenant) {
-        return view('intervenants.edit', compact('intervenant'));
+        return response()->json($intervenant, 200);
     }
 
     public function update(Request $request, Intervenant $intervenant) {
-        $request->validate([
+        $validated = $request->validate([
             'nom_intervenant' => 'required|string|max:255',
             'numero' => 'required|string|max:255',
             'societe' => 'required|string|max:255',
         ]);
 
-        $intervenant->update($request->all());
-        return redirect()->route('intervenants.index')->with('success', 'Intervenant mis à jour avec succès.');
+        $intervenant->update($validated);
+
+        return response()->json([
+            'message' => 'Intervenant mis à jour avec succès.',
+            'intervenant' => $intervenant
+        ], 200);
     }
 
     public function destroy(Intervenant $intervenant) {
         $intervenant->delete();
-        return redirect()->route('intervenants.index')->with('success', 'Intervenant supprimé avec succès.');
+        return response()->json([
+            'message' => 'Intervenant supprimé avec succès.'
+        ], 204);
     }
 }

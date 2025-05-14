@@ -7,42 +7,51 @@ use Illuminate\Http\Request;
 
 class DirectionRegionaleController extends Controller
 {
-    public function index() {
-        $directionRegionale = DirectionRegionale::all();
-        return view('direction_regionales.index', compact('directionRegionale'));
+    public function index()
+    {
+        $directionRegionales = DirectionRegionale::all();
+        return response()->json($directionRegionales, 200);
     }
 
-    public function create() {
-        return view('direction_regionales.create');
-    }
-
-    public function store(Request $request) {
-        $request->validate([
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
             'Nom_DR' => 'required|string|max:255',
         ]);
 
-        DirectionRegionale::create($request->all());
-        return redirect()->route('direction_regionales.index')->with('success', 'Direction régionale créée avec succès.');
+        $directionRegionale = DirectionRegionale::create($validated);
+
+        return response()->json([
+            'message' => 'Direction régionale créée avec succès.',
+            'directionRegionale' => $directionRegionale
+        ], 201);
     }
 
-    public function show(DirectionRegionale $directionRegionale) {
-        return view('direction_regionales.show', compact('directionRegionale'));
+    public function show(DirectionRegionale $directionRegionale)
+    {
+        return response()->json($directionRegionale, 200);
     }
 
-    public function edit(DirectionRegionale $directionRegionale) {
-        return view('direction_regionales.edit', compact('directionRegionale'));
-    }
-
-    public function update(Request $request, DirectionRegionale $directionRegionale) {
-        $request->validate([
+    public function update(Request $request, DirectionRegionale $directionRegionale)
+    {
+        $validated = $request->validate([
             'Nom_DR' => 'required|string|max:255',
         ]);
-        $directionRegionale->update($request->all());
-        return redirect()->route('direction_regionales.index')->with('success', 'Direction régionale mise à jour.');
+
+        $directionRegionale->update($validated);
+
+        return response()->json([
+            'message' => 'Direction régionale mise à jour.',
+            'directionRegionale' => $directionRegionale
+        ], 200);
     }
 
-    public function destroy(DirectionRegionale $directionRegionale) {
+    public function destroy(DirectionRegionale $directionRegionale)
+    {
         $directionRegionale->delete();
-        return redirect()->route('direction_regionales.index')->with('success', 'Direction régionale supprimée avec succès.');
+
+        return response()->json([
+            'message' => 'Direction régionale supprimée avec succès.'
+        ], 204);
     }
 }

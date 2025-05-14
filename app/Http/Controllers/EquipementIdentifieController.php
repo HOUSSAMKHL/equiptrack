@@ -10,60 +10,49 @@ use App\Models\Frequence;
 class EquipementIdentifieController extends Controller
 {
     public function index() {
-        $equipements_identifies = EquipementIdentifie::with('frequence')->get();
-        
-        return view('equipements_identifies.index', compact('equipements_identifies'));
-    }
-    
-    
-    
-
-    public function create() {
-        $categories = Categorie::all();
-        $frequences = Frequence::all();
-        return view('equipements_identifies.create', compact('categories', 'frequences'));
+        $equipementsIdentifies = EquipementIdentifie::with(['categorie', 'frequence'])->get();
+        return response()->json($equipementsIdentifies, 200);
     }
 
     public function store(Request $request) {
-        $request->validate([
+        $validated = $request->validate([
             'nom_equipement' => 'required|string|max:255',
             'secteur' => 'required|string|max:255',
             'id_categorie' => 'required|exists:categories,id',
             'id_frequence' => 'required|exists:frequences,id',
         ]);
 
-        EquipementIdentifie::create($request->all());
-        return redirect()->route('equipements_identifies.index')->with('success', 'Équipement identifié créé avec succès.');
+        $equipement = EquipementIdentifie::create($validated);
+        return response()->json([
+            'message' => 'Équipement identifié créé avec succès.',
+            'equipement' => $equipement
+        ], 201);
     }
 
-    public function show($id)
-{
-    $equipementIdentifie = EquipementIdentifie::with(['categorie', 'frequence'])
-                      ->findOrFail($id);
-    
-    return view('equipements_Identifies.show', compact('equipementIdentifie'));
-}
-
-    public function edit(EquipementIdentifie $equipementIdentifie) {
-        $categories = Categorie::all();
-        $frequences = Frequence::all();
-        return view('equipements_identifies.edit', compact('equipementIdentifie', 'categories', 'frequences'));
+    public function show($id) {
+        $equipement = EquipementIdentifie::with(['categorie', 'frequence'])->findOrFail($id);
+        return response()->json($equipement, 200);
     }
 
     public function update(Request $request, EquipementIdentifie $equipementIdentifie) {
-        $request->validate([
+        $validated = $request->validate([
             'nom_equipement' => 'required|string|max:255',
             'secteur' => 'required|string|max:255',
             'id_categorie' => 'required|exists:categories,id',
             'id_frequence' => 'required|exists:frequences,id',
         ]);
-        
-        $equipementIdentifie->update($request->all());
-        return redirect()->route('equipements_identifies.index')->with('success', 'Équipement identifié mis à jour avec succès.');
+
+        $equipementIdentifie->update($validated);
+        return response()->json([
+            'message' => 'Équipement identifié mis à jour avec succès.',
+            'equipement' => $equipementIdentifie
+        ], 200);
     }
 
     public function destroy(EquipementIdentifie $equipementIdentifie) {
         $equipementIdentifie->delete();
-        return redirect()->route('equipements_identifies.index')->with('success', 'Équipement identifié supprimé avec succès.');
+        return response()->json([
+            'message' => 'Équipement identifié supprimé avec succès.'
+        ], 204);
     }
 }

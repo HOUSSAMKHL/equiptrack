@@ -9,17 +9,12 @@ use App\Models\Complexe;
 class EfpController extends Controller
 {
     public function index() {
-        $Efps = Efp::all();
-        return view('Efps.index', compact('Efps'));
-    }
-
-    public function create() {
-        $complexes = Complexe::all(); 
-        return view('Efps.create', compact('complexes'));
+        $efps = Efp::with('complexe')->get(); // Ajout de la relation complexe si elle existe
+        return response()->json($efps, 200);
     }
 
     public function store(Request $request) {
-        $request->validate([
+        $validated = $request->validate([
             'nom_etablissement' => 'required|string|max:255',
             'adresse' => 'required|string|max:255',
             'numero' => 'required|string|max:255',
@@ -27,33 +22,38 @@ class EfpController extends Controller
             'id_complexe' => 'required|exists:complexes,id',
         ]);
 
-        Efp::create($request->all());
-        return redirect()->route('efps.index')->with('success', 'Efp créé avec succès.');
+        $efp = Efp::create($validated);
+        return response()->json([
+            'message' => 'EFP créé avec succès.',
+            'efp' => $efp
+        ], 201);
     }
 
-    public function show(Efp $Efp) {
-        return view('Efps.show', compact('Efp'));
+    public function show(Efp $efp) {
+        $efp->load('complexe'); // Relation si définie
+        return response()->json($efp, 200);
     }
 
-    public function edit(Efp $Efp) {
-        $complexes = Complexe::all();
-        return view('Efps.edit', compact('Efp', 'complexes'));
-    }
-
-    public function update(Request $request, Efp $Efp) {
-        $request->validate([
+    public function update(Request $request, Efp $efp) {
+        $validated = $request->validate([
             'nom_etablissement' => 'required|string|max:255',
             'adresse' => 'required|string|max:255',
             'numero' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'id_complexe' => 'required|exists:complexes,id',
         ]);
-        $Efp->update($request->all());
-        return redirect()->route('efps.index')->with('success', 'Efp mis à jour avec succès.');
+
+        $efp->update($validated);
+        return response()->json([
+            'message' => 'EFP mis à jour avec succès.',
+            'efp' => $efp
+        ], 200);
     }
 
-    public function destroy(Efp $Efp) {
-        $Efp->delete();
-        return redirect()->route('Efps.index')->with('success', 'Efp supprimé avec succès.');
+    public function destroy(Efp $efp) {
+        $efp->delete();
+        return response()->json([
+            'message' => 'EFP supprimé avec succès.'
+        ], 204);
     }
 }
