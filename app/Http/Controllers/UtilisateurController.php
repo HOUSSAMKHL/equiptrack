@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 class UtilisateurController extends Controller
 {
     public function index() {
-        $utilisateurs = Utilisateur::all();
+        $utilisateurs = Utilisateur::with('role')->get();
         return response()->json($utilisateurs, 200);
     }
 
