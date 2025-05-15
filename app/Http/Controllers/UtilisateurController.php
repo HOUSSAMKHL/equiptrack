@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Utilisateur;
-use Illuminate\Http\Request;
 use App\Models\Role;
-use Illuminate\Support\Facades\Hash;
-use Laravel\Sanctum\HasApiTokens; // si vous utilisez Sanctum
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash; // ✅ CORRECT
+use Laravel\Sanctum\HasApiTokens;
 
 class UtilisateurController extends Controller
 {
@@ -15,28 +15,29 @@ class UtilisateurController extends Controller
         return response()->json($utilisateurs, 200);
     }
 
-    public function store(Request $request) {
-        $request->validate([
-            'nom_user' => 'required|string|max:255',
-            'age' => 'required|integer',
-            'telephone' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'adresse' => 'required|string|max:255',
-            'password' => 'required|string|min:8',
-            'id_roles' => 'required|exists:roles,id',
-        ]);
+   public function store(Request $request) {
+    $request->validate([
+        'nom_user' => 'required|string|max:255',
+        'age' => 'required|integer',
+        'telephone' => 'required|string|max:255',
+        'email' => 'required|email|max:255|unique:utilisateurs,email',
+        'adresse' => 'required|string|max:255',
+        'password' => 'required|string|min:5',
+        'id_roles' => 'required|exists:roles,id',
+    ]);
 
-        // Préparer les données pour la création
-        $data = $request->all();
-        $data['password'] = Hash::make($data['password']); // Hasher le mot de passe
+    // Hasher dynamiquement le mot de passe donné
+    $data = $request->all();
+    $data['password'] = Hash::make($data['password']);
 
-        $utilisateur = Utilisateur::create($data);
+    $utilisateur = Utilisateur::create($data);
 
-        return response()->json([
-            'message' => 'Utilisateur créé avec succès.',
-            'utilisateur' => $utilisateur
-        ], 201);
-    }
+    return response()->json([
+        'message' => 'Utilisateur créé avec succès.',
+        'utilisateur' => $utilisateur
+    ], 201);
+}
+
 
     public function show(Utilisateur $utilisateur) {
         return response()->json($utilisateur, 200);
@@ -78,7 +79,7 @@ class UtilisateurController extends Controller
         ], 204);
     }
     
-    // Enregistrement (Register)
+
 public function register(Request $request) {
     $request->validate([
         'nom_user' => 'required|string|max:255',
@@ -90,8 +91,16 @@ public function register(Request $request) {
         'id_roles' => 'required|exists:roles,id',
     ]);
 
-    $data = $request->all();
-    $data['password'] = Hash::make($data['password']);
+    $data = $request->only([
+        'nom_user',
+        'age',
+        'telephone',
+        'email',
+        'adresse',
+        'id_roles'
+    ]);
+
+    $data['password'] = Hash::make($request->password); // 👈 HASHE ICI
 
     $utilisateur = Utilisateur::create($data);
 
@@ -103,6 +112,7 @@ public function register(Request $request) {
         'token' => $token,
     ], 201);
 }
+
 
 // Connexion (Login)
 public function login(Request $request) {
