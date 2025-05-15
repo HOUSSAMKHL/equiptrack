@@ -6,6 +6,7 @@ use App\Models\Utilisateur;
 use Illuminate\Http\Request;
 use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\HasApiTokens; // si vous utilisez Sanctum
 
 class UtilisateurController extends Controller
 {
@@ -76,4 +77,57 @@ class UtilisateurController extends Controller
             'message' => 'Utilisateur supprimé avec succès.'
         ], 204);
     }
+    
+    // Enregistrement (Register)
+public function register(Request $request) {
+    $request->validate([
+        'nom_user' => 'required|string|max:255',
+        'age' => 'required|integer',
+        'telephone' => 'required|string|max:255',
+        'email' => 'required|email|unique:utilisateurs,email',
+        'adresse' => 'required|string|max:255',
+        'password' => 'required|string|min:8',
+        'id_roles' => 'required|exists:roles,id',
+    ]);
+
+    $data = $request->all();
+    $data['password'] = Hash::make($data['password']);
+
+    $utilisateur = Utilisateur::create($data);
+
+    $token = $utilisateur->createToken('auth_token')->plainTextToken;
+
+    return response()->json([
+        'message' => 'Inscription réussie.',
+        'utilisateur' => $utilisateur,
+        'token' => $token,
+    ], 201);
+}
+
+// Connexion (Login)
+public function login(Request $request) {
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required|string',
+    ]);
+
+    $utilisateur = Utilisateur::where('email', $request->email)->first();
+
+    if (!$utilisateur || !Hash::check($request->password, $utilisateur->password)) {
+        return response()->json(['message' => 'Identifiants invalides.'], 401);
+    }
+
+    // 🔁 Charger la relation 'role'
+    $utilisateur->load('role');
+
+    $token = $utilisateur->createToken('auth_token')->plainTextToken;
+
+    return response()->json([
+        'message' => 'Connexion réussie.',
+        'utilisateur' => $utilisateur,
+        'token' => $token,
+    ]);
+}
+
+
 }

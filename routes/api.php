@@ -18,6 +18,9 @@ use App\Http\Controllers\ComplexeController;
 use App\Http\Controllers\AnomalieController;
 
 
+require __DIR__.'/auth.php';
+
+
 Route::get('/test-api', function () {
     return response()->json(['message' => 'API OK']);
 });
