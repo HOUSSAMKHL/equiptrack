@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id(); 
             $table->string('nom_equipement');
             $table->string('secteur');
-            $table->foreignId('id_categorie')->constrained('categories');
-            $table->foreignId('id_frequence')->constrained('frequences');
+            $table->foreignId('id_categorie')->constrained('categories')->onDelete('cascade');
+            $table->foreignId('id_frequence')->constrained('frequences')->onDelete('cascade');
         });
         
     }

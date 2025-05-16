@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('reference');
             $table->year('annee_dacquisition');
             $table->float('valeur_dacquisition');
-            $table->foreignId('id_atelier')->constrained('ateliers');
-            $table->foreignId('id_equipement')->constrained('equipement_identifies');
+            $table->foreignId('id_atelier')->constrained('ateliers')->onDelete('cascade');
+            $table->foreignId('id_equipement')->constrained('equipement_identifies')->onDelete('cascade');
         });
         
     }

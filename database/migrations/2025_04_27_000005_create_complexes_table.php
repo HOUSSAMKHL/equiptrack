@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('ville')->default('Casablanca');
             $table->text('adresse')->nullable();
             $table->text('description')->nullable();
-            $table->foreignId('id_DR')->constrained('direction_regionales');
+            $table->foreignId('id_DR')->constrained('direction_regionales')->onDelete('cascade');
             $table->timestamps();
         });
         

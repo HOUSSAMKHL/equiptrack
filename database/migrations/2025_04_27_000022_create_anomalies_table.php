@@ -21,7 +21,7 @@ return new class extends Migration
             $table->float('cout_reparation');
             $table->boolean('anomalie_resolue');
             $table->text('pieces_rechange')->nullable();
-            $table->foreignId('id_user')->constrained('utilisateurs');
+            $table->foreignId('id_user')->constrained('utilisateurs')->onDelete('cascade');
         });
         
     }
