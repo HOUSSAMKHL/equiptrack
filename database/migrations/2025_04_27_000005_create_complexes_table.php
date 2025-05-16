@@ -12,13 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('complexes', function (Blueprint $table) {
-            $table->id(); 
+            $table->id();
             $table->string('nom_complexe');
+            $table->string('ville')->default('Casablanca');
+            $table->text('adresse')->nullable();
+            $table->text('description')->nullable();
             $table->foreignId('id_DR')->constrained('direction_regionales');
+            $table->timestamps();
         });
         
     }
-
     /**
      * Reverse the migrations.
      */

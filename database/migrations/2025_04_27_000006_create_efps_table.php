@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('adresse');
             $table->string('numero');
             $table->string('email');
-            $table->foreignId('id_complexe')->constrained('complexes');
+            $table->foreignId('id_complexe')->constrained('complexes')->onDelete('cascade');
         });
         
     }

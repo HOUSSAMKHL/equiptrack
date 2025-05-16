@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ateliers', function (Blueprint $table) {
             $table->id(); 
             $table->string('numero_atelier');
-            $table->foreignId('id_etablissement')->constrained('efps');
+            $table->foreignId('id_etablissement')->constrained('efps')->onDelete('cascade');
         });
         
     }
