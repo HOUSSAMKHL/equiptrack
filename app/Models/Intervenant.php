@@ -17,5 +17,10 @@ class Intervenant extends Model
         'numero',
         'societe',
     ];
-}
 
+    public function anomalies()
+    {
+        return $this->hasMany(Anomalie::class, 'id_intervenant');
+    }
+
+}

@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
         EquipementTracableSeeder::class,
         RoleSeeder::class,
         UtilisateurSeeder::class,
+        IntervenantSeeder::class, 
         AnomalieSeeder::class, 
         OperationSeeder::class,
         IntervenantSeeder::class, 
@@ -49,4 +50,4 @@ class DatabaseSeeder extends Seeder
         ]);
     }
 }
-}
+};
