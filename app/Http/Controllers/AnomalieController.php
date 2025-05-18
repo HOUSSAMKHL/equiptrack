@@ -7,11 +7,16 @@ use Illuminate\Http\Request;
 
 class AnomalieController extends Controller
 {
-    public function index()
-    {
-        $anomalies = Anomalie::with('utilisateur')->get();
-        return response()->json($anomalies, 200);
-    }
+   public function index()
+{
+    $anomalies = Anomalie::with([
+        'utilisateur',
+        'intervenant',
+        'equipementTracable.equipementIdentifie'
+    ])->get();
+    
+    return response()->json($anomalies, 200);
+}
 
     public function store(Request $request)
     {
