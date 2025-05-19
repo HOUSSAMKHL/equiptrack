@@ -16,6 +16,7 @@ use App\Http\Controllers\EffectuerController;
 use App\Http\Controllers\EfpController;
 use App\Http\Controllers\ComplexeController;
 use App\Http\Controllers\AnomalieController;
+use App\Http\Controllers\RapportController;
 
 
 require __DIR__.'/auth.php';
@@ -52,6 +53,9 @@ Route::apiResource('effectuers', EffectuerController::class);
 Route::apiResource('efps', EfpController::class);
 Route::apiResource('complexes', ComplexeController::class)->parameters([
     'complexes' => 'complexe'
+]);
+Route::apiResource('rapports', RapportController::class)->parameters([
+    'rapports' => 'rapport'
 ]);
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

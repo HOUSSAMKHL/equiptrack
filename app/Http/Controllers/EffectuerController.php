@@ -24,6 +24,7 @@ class EffectuerController extends Controller
             'id_operation' => 'required|exists:operations,id',
             'date_operation' => 'required|date',
             'durée' => 'nullable|date_format:H:i:s',
+            'statut' => 'nullable|in:planned, in progress,completed',
         ]);
 
         $effectuer = Effectuer::create($validated);
@@ -48,6 +49,7 @@ class EffectuerController extends Controller
             'id_operation' => 'required|exists:operations,id',
             'date_operation' => 'required|date',
             'durée' => 'nullable|date_format:H:i:s',
+            'statut' => 'nullable|in:planned, in progress,completed',
         ]);
 
         $effectuer->update($validated);

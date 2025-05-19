@@ -18,6 +18,7 @@ class Effectuer extends Model
         'id_operation',
         'date_operation',
         'durée',
+        'statut',
     ];
 
     public function utilisateur()
