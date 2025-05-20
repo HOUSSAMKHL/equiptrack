@@ -14,6 +14,11 @@ class Operation extends Model
 
     protected $fillable = [
         'nom_operation',
+        'type',
+        'equipement',
+        'date',
+        'duree',
+        'intervenant',
+        'statut',
     ];
 }
-

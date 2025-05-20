@@ -7,14 +7,22 @@ use Illuminate\Http\Request;
 
 class OperationController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $operations = Operation::all();
         return response()->json($operations, 200);
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validated = $request->validate([
             'nom_operation' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'equipement' => 'required|string|max:255',
+            'date' => 'required|date',
+            'duree' => 'required|string|max:255',
+            'intervenant' => 'required|string|max:255',
+            'statut' => 'required|string|max:255',
         ]);
 
         $operation = Operation::create($validated);
@@ -25,13 +33,21 @@ class OperationController extends Controller
         ], 201);
     }
 
-    public function show(Operation $operation) {
+    public function show(Operation $operation)
+    {
         return response()->json($operation, 200);
     }
 
-    public function update(Request $request, Operation $operation) {
+    public function update(Request $request, Operation $operation)
+    {
         $validated = $request->validate([
             'nom_operation' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'equipement' => 'required|string|max:255',
+            'date' => 'required|date',
+            'duree' => 'required|string|max:255',
+            'intervenant' => 'required|string|max:255',
+            'statut' => 'required|string|max:255',
         ]);
 
         $operation->update($validated);
@@ -42,8 +58,10 @@ class OperationController extends Controller
         ], 200);
     }
 
-    public function destroy(Operation $operation) {
+    public function destroy(Operation $operation)
+    {
         $operation->delete();
+
         return response()->json([
             'message' => 'Opération supprimée avec succès.'
         ], 204);
