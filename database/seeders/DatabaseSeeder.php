@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Database\Seeders\AnomalieSeeder;
 use Database\Seeders\DirectionRegionaleSeeder;
 use Database\Seeders\ComplexeSeeder;
 use Database\Seeders\EfpSeeder;
@@ -15,6 +16,7 @@ use Database\Seeders\RoleSeeder;
 use Database\Seeders\UtilisateurSeeder;
 use App\Models\User;
 use Database\Seeders\ObservationSeeder;
+use Database\Seeders\RapportSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -40,6 +42,8 @@ class DatabaseSeeder extends Seeder
         IntervenantSeeder::class, 
         EffectuerSeeder::class, 
         ObservationSeeder::class,
+        RapportSeeder::class,
+        AnomalieSeeder::class
     ]);
 
     // Check if the user already exists before creating
