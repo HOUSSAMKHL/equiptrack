@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UtilisateurController;
 use App\Http\Controllers\RoleController;
@@ -18,15 +19,17 @@ use App\Http\Controllers\ComplexeController;
 use App\Http\Controllers\AnomalieController;
 use App\Http\Controllers\RapportController;
 
-
 require __DIR__.'/auth.php';
-
 
 Route::get('/test-api', function () {
     return response()->json(['message' => 'API OK']);
 });
 
+// Status options route (add this before the resource routes)
+Route::get('/equipements_tracables/status-options', 
+    [EquipementTracableController::class, 'getStatusOptions']);
 
+// Resource routes
 Route::apiResource('anomalies', AnomalieController::class)->parameters([
     'anomalies' => 'anomalie'
 ]);
@@ -57,6 +60,8 @@ Route::apiResource('complexes', ComplexeController::class)->parameters([
 Route::apiResource('rapports', RapportController::class)->parameters([
     'rapports' => 'rapport'
 ]);
+
+// Authenticated user route
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

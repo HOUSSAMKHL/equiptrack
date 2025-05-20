@@ -14,9 +14,19 @@ class EquipementTracableController extends Controller
         return response()->json($equipementsTracables, 200);
     }
 
+    public function getStatusOptions() {
+        return response()->json([
+            'status_options' => [
+                'Opérationnel',
+                'En maintenance',
+                'Hors service'
+            ]
+        ]);
+    }
+
     public function store(Request $request) {
         $validated = $request->validate([
-            'statut' => 'required|string|max:255',
+            'statut' => 'required|string|in:Opérationnel,En maintenance,Hors service',
             'reference' => 'required|string|max:255',
             'annee_dacquisition' => 'required|date_format:Y',
             'valeur_dacquisition' => 'required|numeric',
@@ -25,9 +35,8 @@ class EquipementTracableController extends Controller
         ]);
 
         $equipement = EquipementTracable::create($validated);
-
         return response()->json([
-            'message' => 'Équipement tracable créé avec succès.',
+            'message' => 'Équipement tracable créé avec succès',
             'equipement' => $equipement
         ], 201);
     }
@@ -39,7 +48,7 @@ class EquipementTracableController extends Controller
 
     public function update(Request $request, EquipementTracable $equipementTracable) {
         $validated = $request->validate([
-            'statut' => 'required|string|max:255',
+            'statut' => 'required|string|in:Opérationnel,En maintenance,Hors service',
             'reference' => 'required|string|max:255',
             'annee_dacquisition' => 'required|date_format:Y',
             'valeur_dacquisition' => 'required|numeric',
@@ -48,18 +57,16 @@ class EquipementTracableController extends Controller
         ]);
 
         $equipementTracable->update($validated);
-
         return response()->json([
-            'message' => 'Équipement tracable mis à jour avec succès.',
+            'message' => 'Équipement tracable mis à jour',
             'equipement' => $equipementTracable
         ], 200);
     }
 
     public function destroy(EquipementTracable $equipementTracable) {
         $equipementTracable->delete();
-
         return response()->json([
-            'message' => 'Équipement tracable supprimé avec succès.'
+            'message' => 'Équipement supprimé'
         ], 204);
     }
 }
