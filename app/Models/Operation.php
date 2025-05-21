@@ -21,4 +21,16 @@ class Operation extends Model
         'intervenant',
         'statut',
     ];
+
+    public function utilisateurs()
+{
+    return $this->belongsToMany(Utilisateur::class, 'effectuer', 'id_operation', 'id_user')
+        ->withPivot(['id_exemplaire', 'date_operation', 'durée', 'statut']);
+}
+
+public function equipementTracables()
+{
+    return $this->belongsToMany(EquipementTracable::class, 'effectuer', 'id_operation', 'id_exemplaire')
+        ->withPivot(['id_user', 'date_operation', 'durée', 'statut']);
+}
 }

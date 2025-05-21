@@ -30,5 +30,16 @@ class EquipementTracable extends Model
     {
         return $this->belongsTo(EquipementIdentifie::class, 'id_equipement');
     }
+    public function utilisateurs()
+{
+    return $this->belongsToMany(Utilisateur::class, 'effectuer', 'id_exemplaire', 'id_user')
+        ->withPivot(['id_operation', 'date_operation', 'durée', 'statut']);
+}
+
+public function operations()
+{
+    return $this->belongsToMany(Operation::class, 'effectuer', 'id_exemplaire', 'id_operation')
+        ->withPivot(['id_user', 'date_operation', 'durée', 'statut']);
+}
 }
 

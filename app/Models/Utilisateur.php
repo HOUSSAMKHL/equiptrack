@@ -30,4 +30,15 @@ class Utilisateur extends Model
     {
         return $this->belongsTo(Role::class, 'id_roles');
     }
+    public function equipementTracables()
+{
+    return $this->belongsToMany(EquipementTracable::class, 'effectuer', 'id_user', 'id_exemplaire')
+        ->withPivot(['id_operation', 'date_operation', 'durée', 'statut']);
+}
+
+public function operations()
+{
+    return $this->belongsToMany(Operation::class, 'effectuer', 'id_user', 'id_operation')
+        ->withPivot(['id_exemplaire', 'date_operation', 'durée', 'statut']);
+}
 }
