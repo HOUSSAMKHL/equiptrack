@@ -21,6 +21,7 @@ class Effectuer extends Model
         'statut',
     ];
 
+
     public function utilisateur()
     {
         return $this->belongsTo(Utilisateur::class , 'id_user');

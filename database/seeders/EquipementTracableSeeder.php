@@ -16,7 +16,8 @@ class EquipementTracableSeeder extends Seeder
                 'annee_dacquisition' => 2021, 
                 'valeur_dacquisition' => 1500.00, 
                 'id_atelier' => 1, 
-                'id_equipement' => 1
+                'id_equipement' => 1,
+                'id_frequence' => 1
             ],
             [
                 'statut' => 'En maintenance', 
@@ -24,7 +25,8 @@ class EquipementTracableSeeder extends Seeder
                 'annee_dacquisition' => 2020, 
                 'valeur_dacquisition' => 2000.00, 
                 'id_atelier' => 2, 
-                'id_equipement' => 2
+                'id_equipement' => 2,
+                'id_frequence' => 2
             ],
             [
                 'statut' => 'Hors service', 
@@ -32,7 +34,8 @@ class EquipementTracableSeeder extends Seeder
                 'annee_dacquisition' => 2022, 
                 'valeur_dacquisition' => 2500.00, 
                 'id_atelier' => 1, 
-                'id_equipement' => 3
+                'id_equipement' => 3,
+                'id_frequence' => 3
             ]
         ]);
     }

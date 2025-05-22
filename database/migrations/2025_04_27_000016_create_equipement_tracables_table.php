@@ -19,6 +19,7 @@ return new class extends Migration
             $table->float('valeur_dacquisition');
             $table->foreignId('id_atelier')->constrained('ateliers')->onDelete('cascade');
             $table->foreignId('id_equipement')->constrained('equipement_identifies')->onDelete('cascade');
+            $table->foreignId('id_frequence')->constrained('frequences')->onDelete('cascade');
         });
         
     }

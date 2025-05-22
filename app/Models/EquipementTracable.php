@@ -19,8 +19,12 @@ class EquipementTracable extends Model
         'valeur_dacquisition',
         'id_atelier',
         'id_equipement',
+        'id_frequence',
     ];
-
+        public function frequence()
+    {
+        return $this->belongsTo(Frequence::class , 'id_frequence');
+    }
     public function atelier()
     {
         return $this->belongsTo(Atelier::class, 'id_atelier');

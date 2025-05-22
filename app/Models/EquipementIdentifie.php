@@ -16,17 +16,10 @@ class EquipementIdentifie extends Model
         'nom_equipement',
         'secteur',
         'id_categorie',
-        'id_frequence',
     ];
 
     public function categorie()
     {
         return $this->belongsTo(Categorie::class, 'id_categorie');
     }
-
-    public function frequence()
-{
-    return $this->belongsTo(Frequence::class, 'id_frequence');
-}
-
 }

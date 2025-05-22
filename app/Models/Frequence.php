@@ -15,8 +15,8 @@ class Frequence extends Model
     protected $fillable = [
         'type_frequence',
     ];
-    public function equipementsIdentifies()
+    public function equipementTracable()
 {
-    return $this->hasMany(EquipementIdentifie::class, 'frequence_id');
+    return $this->hasMany(EquipementTracable::class, 'id_frequence');
 }
 }

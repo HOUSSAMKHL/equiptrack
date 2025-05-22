@@ -90,6 +90,13 @@ class EffectuerController extends Controller
                 'statut' => 'required|in:planned,in progress,completed',
             ]);
 
+
+            if ($request->has('equipement_tracable.id_frequence')) {
+                $equipement = EquipementTracable::find($request->input('id_exemplaire'));
+                $equipement->id_frequence = $request->input('equipement_tracable.id_frequence');
+                $equipement->save();
+               }
+
             DB::beginTransaction();
             
             $effectuer->update($validated);

@@ -10,7 +10,7 @@ use App\Models\EquipementIdentifie;
 class EquipementTracableController extends Controller
 {
     public function index() {
-        $equipementsTracables = EquipementTracable::with(['atelier', 'equipementIdentifie'])->get();
+        $equipementsTracables = EquipementTracable::with(['atelier', 'equipementIdentifie','frequence'])->get();
         return response()->json($equipementsTracables, 200);
     }
 
@@ -32,6 +32,7 @@ class EquipementTracableController extends Controller
             'valeur_dacquisition' => 'required|numeric',
             'id_atelier' => 'required|exists:ateliers,id',
             'id_equipement' => 'required|exists:equipement_identifies,id',
+            'id_frequence' => 'required|exists:frequences,id',
         ]);
 
         $equipement = EquipementTracable::create($validated);
@@ -42,7 +43,7 @@ class EquipementTracableController extends Controller
     }
 
     public function show($id) {
-        $equipement = EquipementTracable::with(['atelier', 'equipementIdentifie'])->findOrFail($id);
+$equipement = EquipementTracable::with(['atelier', 'equipementIdentifie', 'frequence'])->findOrFail($id);
         return response()->json($equipement, 200);
     }
 
@@ -54,6 +55,7 @@ class EquipementTracableController extends Controller
             'valeur_dacquisition' => 'required|numeric',
             'id_atelier' => 'required|exists:ateliers,id',
             'id_equipement' => 'required|exists:equipement_identifies,id',
+            'id_frequence' => 'required|exists:frequences,id',
         ]);
 
         $equipementTracable->update($validated);

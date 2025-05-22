@@ -10,7 +10,7 @@ use App\Models\Frequence;
 class EquipementIdentifieController extends Controller
 {
     public function index() {
-        $equipementsIdentifies = EquipementIdentifie::with(['categorie', 'frequence'])->get();
+        $equipementsIdentifies = EquipementIdentifie::with(['categorie'])->get();
         return response()->json($equipementsIdentifies, 200);
     }
 
@@ -19,7 +19,6 @@ class EquipementIdentifieController extends Controller
             'nom_equipement' => 'required|string|max:255',
             'secteur' => 'required|string|max:255',
             'id_categorie' => 'required|exists:categories,id',
-            'id_frequence' => 'required|exists:frequences,id',
         ]);
 
         $equipement = EquipementIdentifie::create($validated);
@@ -30,7 +29,7 @@ class EquipementIdentifieController extends Controller
     }
 
     public function show($id) {
-        $equipement = EquipementIdentifie::with(['categorie', 'frequence'])->findOrFail($id);
+        $equipement = EquipementIdentifie::with(['categorie', ])->findOrFail($id);
         return response()->json($equipement, 200);
     }
 
@@ -39,7 +38,6 @@ class EquipementIdentifieController extends Controller
             'nom_equipement' => 'required|string|max:255',
             'secteur' => 'required|string|max:255',
             'id_categorie' => 'required|exists:categories,id',
-            'id_frequence' => 'required|exists:frequences,id',
         ]);
 
         $equipementIdentifie->update($validated);
