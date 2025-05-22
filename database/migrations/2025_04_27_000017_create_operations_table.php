@@ -11,12 +11,6 @@ return new class extends Migration
         Schema::create('operations', function (Blueprint $table) {
             $table->id();
             $table->string('nom_operation');
-            $table->string('type'); // Hebdomadaire, etc.
-            $table->string('equipement');
-            $table->date('date');
-            $table->string('duree');
-            $table->string('intervenant');
-            $table->string('statut'); // Planned, In Progress, Resolved
         });
     }
 
