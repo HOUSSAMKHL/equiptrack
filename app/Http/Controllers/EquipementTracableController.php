@@ -32,7 +32,7 @@ class EquipementTracableController extends Controller
             'valeur_dacquisition' => 'required|numeric',
             'id_atelier' => 'required|exists:ateliers,id',
             'id_equipement' => 'required|exists:equipement_identifies,id',
-            'id_frequence' => 'required|exists:frequences,id',
+            'id_frequence' => 'nullable|exists:frequences,id',
         ]);
 
         $equipement = EquipementTracable::create($validated);
@@ -55,7 +55,7 @@ $equipement = EquipementTracable::with(['atelier', 'equipementIdentifie', 'frequ
             'valeur_dacquisition' => 'required|numeric',
             'id_atelier' => 'required|exists:ateliers,id',
             'id_equipement' => 'required|exists:equipement_identifies,id',
-            'id_frequence' => 'required|exists:frequences,id',
+            'id_frequence' => 'nullable|exists:frequences,id',
         ]);
 
         $equipementTracable->update($validated);
