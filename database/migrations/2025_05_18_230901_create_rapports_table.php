@@ -11,10 +11,10 @@ return new class extends Migration
         Schema::create('rapports', function (Blueprint $table) {
             $table->id();
             $table->string('titre');
-            $table->string('type');
             $table->dateTime('date_de_generation');
             $table->string('statut');
             $table->foreignId('id_user')->constrained('utilisateurs');
+            $table->string('fichier_path')->nullable(); // Champ pour stocker le chemin du fichier
             $table->timestamps();
         });
     }

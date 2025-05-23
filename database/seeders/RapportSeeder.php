@@ -16,44 +16,43 @@ class RapportSeeder extends Seeder
         $rapports = [
             [
                 'titre' => 'Rapport annuel 2023',
-                'type' => 'Annuel',
                 'date_de_generation' => Carbon::now()->subDays(10),
                 'statut' => 'Terminé',
-                'id_user' => 1
+                'id_user' => 1,
+                'fichier_path' => 'rapports/fichier_annuel_2023.pdf'
             ],
             [
                 'titre' => 'Analyse des ventes Q1',
-                'type' => 'Trimestriel',
                 'date_de_generation' => Carbon::now()->subDays(25),
                 'statut' => 'Validé',
-                'id_user' => 2
+                'id_user' => 2,
+                'fichier_path' => 'rapports/ventes_q1.pdf'
             ],
             [
                 'titre' => 'Audit sécurité',
-                'type' => 'Spécial',
                 'date_de_generation' => Carbon::now()->subDays(5),
                 'statut' => 'En cours',
-                'id_user' => 1
+                'id_user' => 1,
+                'fichier_path' => 'rapports/audit_securite.pdf'
             ],
             [
                 'titre' => 'Rapport mensuel - Mars',
-                'type' => 'Mensuel',
                 'date_de_generation' => Carbon::now()->subDays(15),
                 'statut' => 'Terminé',
-                'id_user' => 3
+                'id_user' => 3,
+                'fichier_path' => 'rapports/mensuel_mars.pdf'
             ],
             [
                 'titre' => 'Analyse marché',
-                'type' => 'Spécial',
                 'date_de_generation' => Carbon::now()->subDays(3),
                 'statut' => 'Brouillon',
-                'id_user' => 2
+                'id_user' => 2,
+                'fichier_path' => 'rapports/analyse_marche.pdf'
             ]
         ];
 
         foreach ($rapports as $rapport) {
             Rapport::create($rapport);
         }
-
     }
 }

@@ -12,19 +12,16 @@ class Rapport extends Model
 
     protected $fillable = [
         'titre',
-        'type',
         'date_de_generation',
         'statut',
         'id_user',
+        'fichier_path', // Ajout du champ pour stocker le chemin du fichier
     ];
 
     protected $dates = ['date_de_generation'];
 
-    /**
-     * Relation avec l'utilisateur qui a généré le rapport
-     */
     public function utilisateur()
     {
-        return $this->belongsTo(utilisateur::class, 'id_user');
+        return $this->belongsTo(Utilisateur::class, 'id_user');
     }
 }

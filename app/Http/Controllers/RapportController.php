@@ -5,42 +5,36 @@ use App\Http\Controllers\Controller;
 use App\Models\Rapport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class RapportController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-   // Dans RapportController.php
-public function index()
-{
-    $rapports = Rapport::with('utilisateur')->get();
-    
-    if ($rapports->isEmpty()) {
+    public function index()
+    {
+        $rapports = Rapport::with('utilisateur')->get();
+        
+        if ($rapports->isEmpty()) {
+            return response()->json([
+                'success' => true,
+                'data' => [],
+                'message' => 'Aucun rapport trouvé'
+            ]);
+        }
+
         return response()->json([
             'success' => true,
-            'data' => [],
-            'message' => 'Aucun rapport trouvé'
+            'data' => $rapports
         ]);
     }
 
-    return response()->json([
-        'success' => true,
-        'data' => $rapports
-    ]);
-}
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'titre' => 'required|string|max:255',
-            'type' => 'required|string|max:100',
             'date_de_generation' => 'required|date',
             'statut' => 'required|string|max:50',
-            'id_user' => 'required|exists:utilisateurs,id'
+            'id_user' => 'required|exists:utilisateurs,id',
+            'fichier' => 'required|file|mimes:pdf,doc,docx|max:2048' // 2MB max
         ]);
 
         if ($validator->fails()) {
@@ -50,7 +44,18 @@ public function index()
             ], 422);
         }
 
-        $rapport = Rapport::create($request->all());
+        // Stockage du fichier
+        $file = $request->file('fichier');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $filePath = $file->storeAs('rapports', $fileName, 'public');
+
+        $rapport = Rapport::create([
+            'titre' => $request->titre,
+            'date_de_generation' => $request->date_de_generation,
+            'statut' => $request->statut,
+            'id_user' => $request->id_user,
+            'fichier_path' => $filePath
+        ]);
 
         return response()->json([
             'success' => true,
@@ -58,9 +63,6 @@ public function index()
         ], 201);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Rapport $rapport)
     {
         return response()->json([
@@ -69,17 +71,14 @@ public function index()
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Rapport $rapport)
     {
         $validator = Validator::make($request->all(), [
             'titre' => 'sometimes|required|string|max:255',
-            'type' => 'sometimes|required|string|max:100',
             'date_de_generation' => 'sometimes|required|date',
             'statut' => 'sometimes|required|string|max:50',
-            'id_user' => 'sometimes|required|exists:utilisateurs,id'
+            'id_user' => 'sometimes|required|exists:utilisateurs,id',
+            'fichier' => 'sometimes|file|mimes:pdf,doc,docx|max:2048'
         ]);
 
         if ($validator->fails()) {
@@ -89,7 +88,22 @@ public function index()
             ], 422);
         }
 
-        $rapport->update($request->all());
+        $data = $request->except('fichier');
+
+        if ($request->hasFile('fichier')) {
+            // Supprimer l'ancien fichier
+            if ($rapport->fichier_path) {
+                Storage::disk('public')->delete($rapport->fichier_path);
+            }
+
+            // Stocker le nouveau fichier
+            $file = $request->file('fichier');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $filePath = $file->storeAs('rapports', $fileName, 'public');
+            $data['fichier_path'] = $filePath;
+        }
+
+        $rapport->update($data);
 
         return response()->json([
             'success' => true,
@@ -97,15 +111,43 @@ public function index()
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Rapport $rapport)
     {
+        // Supprimer le fichier associé
+        if ($rapport->fichier_path) {
+            Storage::disk('public')->delete($rapport->fichier_path);
+        }
+
         $rapport->delete();
         return response()->json([
             'success' => true,
             'message' => 'Rapport supprimé avec succès'
         ]);
     }
+
+  public function download($id)
+{
+    $rapport = Rapport::findOrFail($id);
+
+    if (!$rapport->fichier_path) {
+        return response()->json(['error' => 'Aucun fichier associé'], 404);
+    }
+
+    $filePath = storage_path('app/public/' . $rapport->fichier_path);
+
+    if (!file_exists($filePath)) {
+        return response()->json(['error' => 'Fichier introuvable'], 404);
+    }
+
+    // Vérifiez la taille du fichier
+    $fileSize = filesize($filePath);
+    if ($fileSize === 0) {
+        return response()->json(['error' => 'Fichier vide'], 400);
+    }
+
+    return response()->download($filePath, basename($rapport->fichier_path), [
+        'Content-Type' => mime_content_type($filePath),
+        'Content-Length' => $fileSize
+    ]);
+}
 }
