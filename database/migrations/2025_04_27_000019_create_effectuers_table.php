@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('id_exemplaire')->constrained('equipement_tracables')->onDelete('cascade');
             $table->foreignId('id_operation')->constrained('operations')->onDelete('cascade');
             $table->date('date_operation');
-            $table->time('durée');
+            $table->integer('durée');
             $table->enum('statut', ['planned', 'in progress','completed'])->default('planned');
         });
         

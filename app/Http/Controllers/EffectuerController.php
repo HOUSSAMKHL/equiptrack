@@ -32,7 +32,7 @@ class EffectuerController extends Controller
             'id_exemplaire' => 'required|exists:equipement_tracables,id',
             'id_operation' => 'required|exists:operations,id',
             'date_operation' => 'required|date',
-            'durée' => 'required|string|regex:/^\d{2}:\d{2}:\d{2}$/', // Format HH:MM:SS
+            'durée' => 'required|numeric|min:0', // Changed to accept decimal hours
             'statut' => 'required|in:planned,in progress,completed',
         ]);
 
@@ -44,7 +44,7 @@ class EffectuerController extends Controller
                 'id_exemplaire' => $validated['id_exemplaire'],
                 'id_operation' => $validated['id_operation'],
                 'date_operation' => $validated['date_operation'],
-                'durée' => $validated['durée'],
+                'durée' => $validated['durée'], // Store directly as hours
                 'statut' => $validated['statut'],
             ]);
 
@@ -86,16 +86,15 @@ class EffectuerController extends Controller
                 'id_exemplaire' => 'required|exists:equipement_tracables,id',
                 'id_operation' => 'required|exists:operations,id',
                 'date_operation' => 'required|date',
-                'durée' => ['required', 'string', 'regex:/^\d{2}:\d{2}:\d{2}$/'],
+                'durée' => 'required|integer|min:0', // Changed to accept decimal hours
                 'statut' => 'required|in:planned,in progress,completed',
             ]);
-
 
             if ($request->has('equipement_tracable.id_frequence')) {
                 $equipement = EquipementTracable::find($request->input('id_exemplaire'));
                 $equipement->id_frequence = $request->input('equipement_tracable.id_frequence');
                 $equipement->save();
-               }
+            }
 
             DB::beginTransaction();
             
