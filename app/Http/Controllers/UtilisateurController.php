@@ -80,6 +80,7 @@ class UtilisateurController extends Controller
     }
     
 
+// Register
 public function register(Request $request) {
     $request->validate([
         'nom_user' => 'required|string|max:255',
@@ -100,10 +101,11 @@ public function register(Request $request) {
         'id_roles'
     ]);
 
-    $data['password'] = Hash::make($request->password); // 👈 HASHE ICI
+    $data['password'] = Hash::make($request->password);
 
     $utilisateur = Utilisateur::create($data);
 
+    // Générer le token
     $token = $utilisateur->createToken('auth_token')->plainTextToken;
 
     return response()->json([
@@ -114,7 +116,7 @@ public function register(Request $request) {
 }
 
 
-// Connexion (Login)
+// Login
 public function login(Request $request) {
     $request->validate([
         'email' => 'required|email',
@@ -127,7 +129,6 @@ public function login(Request $request) {
         return response()->json(['message' => 'Identifiants invalides.'], 401);
     }
 
-    // 🔁 Charger la relation 'role'
     $utilisateur->load('role');
 
     $token = $utilisateur->createToken('auth_token')->plainTextToken;
@@ -138,6 +139,8 @@ public function login(Request $request) {
         'token' => $token,
     ]);
 }
+
+
 
 
 }
