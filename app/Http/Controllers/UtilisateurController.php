@@ -15,7 +15,7 @@ class UtilisateurController extends Controller
         return response()->json($utilisateurs, 200);
     }
 
-   public function store(Request $request) {
+public function store(Request $request) {
     $request->validate([
         'nom_user' => 'required|string|max:255',
         'age' => 'required|integer',
@@ -24,20 +24,25 @@ class UtilisateurController extends Controller
         'adresse' => 'required|string|max:255',
         'password' => 'required|string|min:5',
         'id_roles' => 'required|exists:roles,id',
+        'id_DR' => 'nullable|exists:direction_regionales,id',
+        'id_complexe' => 'nullable|exists:complexes,id',
+        'id_etablissement' => 'nullable|exists:efps,id',
+        'id_atelier' => 'nullable|exists:ateliers,id',
     ]);
 
     // Hasher dynamiquement le mot de passe donné
     $data = $request->all();
     $data['password'] = Hash::make($data['password']);
 
+
     $utilisateur = Utilisateur::create($data);
+
 
     return response()->json([
         'message' => 'Utilisateur créé avec succès.',
         'utilisateur' => $utilisateur
     ], 201);
 }
-
 
     public function show(Utilisateur $utilisateur) {
         return response()->json($utilisateur, 200);

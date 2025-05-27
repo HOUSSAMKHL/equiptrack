@@ -1,16 +1,19 @@
 <?php
-
 namespace App\Models;
+
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
 
 class EquipementTracable extends Model
 {
     use HasFactory;
 
+
     protected $table = 'equipement_tracables';
     public $timestamps = false;
+
 
     protected $fillable = [
         'statut',
@@ -20,30 +23,24 @@ class EquipementTracable extends Model
         'id_atelier',
         'id_equipement',
         'id_frequence',
+        'id_etablissement', // Nouvelle relation
     ];
-        public function frequence()
-    {
-        return $this->belongsTo(Frequence::class , 'id_frequence');
-    }
+
+
     public function atelier()
     {
         return $this->belongsTo(Atelier::class, 'id_atelier');
     }
 
+
     public function equipementIdentifie()
     {
         return $this->belongsTo(EquipementIdentifie::class, 'id_equipement');
     }
-    public function utilisateurs()
-{
-    return $this->belongsToMany(Utilisateur::class, 'effectuer', 'id_exemplaire', 'id_user')
-        ->withPivot(['id_operation', 'date_operation', 'durée', 'statut']);
-}
 
-public function operations()
-{
-    return $this->belongsToMany(Operation::class, 'effectuer', 'id_exemplaire', 'id_operation')
-        ->withPivot(['id_user', 'date_operation', 'durée', 'statut']);
-}
-}
 
+    public function efp()
+    {
+        return $this->belongsTo(Efp::class, 'id_etablissement');
+    }
+}

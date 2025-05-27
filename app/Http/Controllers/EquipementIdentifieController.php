@@ -14,20 +14,21 @@ class EquipementIdentifieController extends Controller
         return response()->json($equipementsIdentifies, 200);
     }
 
-    public function store(Request $request) {
-        $validated = $request->validate([
-            'nom_equipement' => 'required|string|max:255',
-            'secteur' => 'required|string|max:255',
-            'id_categorie' => 'required|exists:categories,id',
-        ]);
+public function store(Request $request) {
+    $validated = $request->validate([
+        'nom_equipement' => 'required|string|max:255',
+        'secteur' => 'required|string|max:255',
+        'id_categorie' => 'required|exists:categories,id',
+        'id_etablissement' => 'required|exists:efps,id', // Nouvelle relation
+    ]);
 
-        $equipement = EquipementIdentifie::create($validated);
-        return response()->json([
-            'message' => 'Équipement identifié créé avec succès.',
-            'equipement' => $equipement
-        ], 201);
-    }
 
+    $equipement = EquipementIdentifie::create($validated);
+    return response()->json([
+        'message' => 'Équipement identifié créé avec succès.',
+        'equipement' => $equipement
+    ], 201);
+}
     public function show($id) {
         $equipement = EquipementIdentifie::with(['categorie', ])->findOrFail($id);
         return response()->json($equipement, 200);

@@ -1,20 +1,18 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Facades\Hash;
-
 
 
 class Utilisateur extends Model
 {
-    use HasFactory , HasApiTokens;
+    use HasFactory;
+
 
     protected $table = 'utilisateurs';
     public $timestamps = false;
+
 
     protected $fillable = [
         'nom_user',
@@ -24,21 +22,39 @@ class Utilisateur extends Model
         'adresse',
         'password',
         'id_roles',
+        'id_DR', // Direction Régionale
+        'id_complexe', // Complexe
+        'id_etablissement', // EFP
+        'id_atelier', // Atelier
     ];
+
 
     public function role()
     {
         return $this->belongsTo(Role::class, 'id_roles');
     }
-    public function equipementTracables()
-{
-    return $this->belongsToMany(EquipementTracable::class, 'effectuer', 'id_user', 'id_exemplaire')
-        ->withPivot(['id_operation', 'date_operation', 'durée', 'statut']);
-}
 
-public function operations()
-{
-    return $this->belongsToMany(Operation::class, 'effectuer', 'id_user', 'id_operation')
-        ->withPivot(['id_exemplaire', 'date_operation', 'durée', 'statut']);
-}
+
+    public function directionRegionale()
+    {
+        return $this->belongsTo(DirectionRegionale::class, 'id_DR');
+    }
+
+
+    public function complexe()
+    {
+        return $this->belongsTo(Complexe::class, 'id_complexe');
+    }
+
+
+    public function efp()
+    {
+        return $this->belongsTo(Efp::class, 'id_etablissement');
+    }
+
+
+    public function atelier()
+    {
+        return $this->belongsTo(Atelier::class, 'id_atelier');
+    }
 }

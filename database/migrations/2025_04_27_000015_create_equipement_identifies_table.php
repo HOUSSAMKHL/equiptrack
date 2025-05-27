@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nom_equipement');
             $table->string('secteur');
             $table->foreignId('id_categorie')->constrained('categories')->onDelete('cascade');
+            $table->foreignId('id_etablissement')->constrained('efps')->onDelete('cascade');
         });
         
     }
