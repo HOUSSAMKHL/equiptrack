@@ -60,7 +60,8 @@ Route::apiResource('complexes', ComplexeController::class)->parameters([
 Route::apiResource('rapports', RapportController::class)->parameters([
     'rapports' => 'rapport'
 ]);
-
+// In api.php
+Route::get('rapports/{rapport}/download', [RapportController::class, 'download']);
 // Authenticated user route
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

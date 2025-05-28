@@ -1,19 +1,15 @@
 <?php
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 
 class EquipementTracable extends Model
 {
     use HasFactory;
 
-
     protected $table = 'equipement_tracables';
     public $timestamps = false;
-
 
     protected $fillable = [
         'statut',
@@ -26,21 +22,24 @@ class EquipementTracable extends Model
         'id_etablissement', // Nouvelle relation
     ];
 
-
     public function atelier()
     {
         return $this->belongsTo(Atelier::class, 'id_atelier');
     }
-
 
     public function equipementIdentifie()
     {
         return $this->belongsTo(EquipementIdentifie::class, 'id_equipement');
     }
 
-
     public function efp()
     {
         return $this->belongsTo(Efp::class, 'id_etablissement');
+    }
+
+    // Ajoutez cette méthode pour définir la relation avec Frequence
+    public function frequence()
+    {
+        return $this->belongsTo(Frequence::class, 'id_frequence');
     }
 }
