@@ -6,6 +6,7 @@ use App\Models\Rapport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class RapportController extends Controller
 {
@@ -125,7 +126,7 @@ class RapportController extends Controller
         ]);
     }
 
-  public function download($id)
+    public function view($id)
 {
     $rapport = Rapport::findOrFail($id);
 
@@ -139,15 +140,33 @@ class RapportController extends Controller
         return response()->json(['error' => 'Fichier introuvable'], 404);
     }
 
-    // Vérifiez la taille du fichier
-    $fileSize = filesize($filePath);
-    if ($fileSize === 0) {
-        return response()->json(['error' => 'Fichier vide'], 400);
+    return response()->file($filePath, [
+        'Content-Type' => mime_content_type($filePath),
+        'Content-Disposition' => 'inline; filename="' . basename($filePath) . '"'
+    ]);
+}
+
+public function download($id)
+{
+    $rapport = Rapport::findOrFail($id);
+
+    if (!$rapport->fichier_path) {
+        return response()->json(['error' => 'Aucun fichier associé'], 404);
     }
 
-    return response()->download($filePath, basename($rapport->fichier_path), [
+    $filePath = storage_path('app/public/' . $rapport->fichier_path);
+
+    if (!file_exists($filePath)) {
+        return response()->json(['error' => 'Fichier introuvable'], 404);
+    }
+
+    $originalName = basename($rapport->fichier_path);
+    $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+    $downloadName = Str::slug($rapport->titre) . '.' . $extension;
+
+    return response()->download($filePath, $downloadName, [
         'Content-Type' => mime_content_type($filePath),
-        'Content-Length' => $fileSize
+        'Content-Disposition' => 'attachment; filename="' . $downloadName . '"'
     ]);
 }
 }

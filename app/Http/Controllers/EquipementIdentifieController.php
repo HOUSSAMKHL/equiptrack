@@ -18,8 +18,9 @@ public function store(Request $request) {
     $validated = $request->validate([
         'nom_equipement' => 'required|string|max:255',
         'secteur' => 'required|string|max:255',
+        'quantite' => 'required|integer|min:1',
         'id_categorie' => 'required|exists:categories,id',
-        'id_etablissement' => 'required|exists:efps,id', // Nouvelle relation
+        'id_etablissement' => 'required|exists:efps,id', 
     ]);
 
 
@@ -38,6 +39,7 @@ public function store(Request $request) {
         $validated = $request->validate([
             'nom_equipement' => 'required|string|max:255',
             'secteur' => 'required|string|max:255',
+            'quantite' => 'required|integer|min:1',
             'id_categorie' => 'required|exists:categories,id',
         ]);
 

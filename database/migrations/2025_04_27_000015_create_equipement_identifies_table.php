@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id(); 
             $table->string('nom_equipement');
             $table->string('secteur');
+            $table->integer('quantite')->default(1); // Ajout de la colonne quantite
             $table->foreignId('id_categorie')->constrained('categories')->onDelete('cascade');
             $table->foreignId('id_etablissement')->constrained('efps')->onDelete('cascade');
         });

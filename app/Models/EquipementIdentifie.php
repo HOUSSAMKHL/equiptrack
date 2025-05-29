@@ -18,6 +18,7 @@ class EquipementIdentifie extends Model
     protected $fillable = [
         'nom_equipement',
         'secteur',
+        'quantite', // Ajout de la colonne quantite
         'id_categorie',
         'id_etablissement', // Nouvelle relation
     ];
