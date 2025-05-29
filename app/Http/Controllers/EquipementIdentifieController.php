@@ -10,35 +10,35 @@ use App\Models\Frequence;
 class EquipementIdentifieController extends Controller
 {
     public function index() {
-        $equipementsIdentifies = EquipementIdentifie::with(['categorie'])->get();
+        $equipementsIdentifies = EquipementIdentifie::with(['categorie', 'etablissement'])->get();
         return response()->json($equipementsIdentifies, 200);
     }
 
-public function store(Request $request) {
-    $validated = $request->validate([
-        'nom_equipement' => 'required|string|max:255',
-        'secteur' => 'required|string|max:255',
-        'quantite' => 'required|integer|min:1',
-        'id_categorie' => 'required|exists:categories,id',
-        'id_etablissement' => 'required|exists:efps,id', 
-    ]);
+    public function store(Request $request) {
+        $validated = $request->validate([
+            'nom_equipement' => 'required|string|max:255',
+            'secteur' => 'required|in:Mécanique,Électrique,Hydraulique,Découpe,Usinage',
+            'quantite' => 'required|integer|min:1',
+            'id_categorie' => 'required|exists:categories,id',
+            'id_etablissement' => 'required|exists:efps,id', 
+        ]);
 
+        $equipement = EquipementIdentifie::create($validated);
+        return response()->json([
+            'message' => 'Équipement identifié créé avec succès.',
+            'equipement' => $equipement
+        ], 201);
+    }
 
-    $equipement = EquipementIdentifie::create($validated);
-    return response()->json([
-        'message' => 'Équipement identifié créé avec succès.',
-        'equipement' => $equipement
-    ], 201);
-}
     public function show($id) {
-        $equipement = EquipementIdentifie::with(['categorie', ])->findOrFail($id);
+        $equipement = EquipementIdentifie::with(['categorie', 'etablissement'])->findOrFail($id);
         return response()->json($equipement, 200);
     }
 
     public function update(Request $request, EquipementIdentifie $equipementIdentifie) {
         $validated = $request->validate([
             'nom_equipement' => 'required|string|max:255',
-            'secteur' => 'required|string|max:255',
+            'secteur' => 'required|in:Mécanique,Électrique,Hydraulique,Découpe,Usinage',
             'quantite' => 'required|integer|min:1',
             'id_categorie' => 'required|exists:categories,id',
         ]);

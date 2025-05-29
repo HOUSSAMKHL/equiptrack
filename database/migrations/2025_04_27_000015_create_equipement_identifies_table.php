@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('equipement_identifies', function (Blueprint $table) {
             $table->id(); 
             $table->string('nom_equipement');
-            $table->string('secteur');
+            $table->enum('secteur', ['Mécanique', 'Électrique', 'Hydraulique', 'Découpe', 'Usinage']);
             $table->integer('quantite')->default(1); // Ajout de la colonne quantite
             $table->foreignId('id_categorie')->constrained('categories')->onDelete('cascade');
             $table->foreignId('id_etablissement')->constrained('efps')->onDelete('cascade');
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('equipement_identifiés');
+        Schema::dropIfExists('equipement_identifies');
     }
 };
