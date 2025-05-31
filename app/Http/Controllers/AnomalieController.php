@@ -71,7 +71,7 @@ class AnomalieController extends Controller
             'anomalie_resolue' => 'required|boolean',
             'pieces_rechange' => 'nullable|string',
             'id_equipement' => 'required|exists:equipement_tracables,id',
-            'id_intervenant' => 'required|exists:intervenants,id',
+            'id_intervenant' => 'nullable|exists:intervenants,id',
             'id_user' => 'required|exists:utilisateurs,id'
         ]);
 
