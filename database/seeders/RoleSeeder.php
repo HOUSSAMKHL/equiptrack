@@ -14,6 +14,7 @@ class RoleSeeder extends Seeder
         ['nom_role' => 'Directeur Complexe'],
         ['nom_role' => 'Directeur Établissement'],
         ['nom_role' => 'Formateur'],
+        ['nom_role' => 'Admin'],
     ]);
 }
 }
