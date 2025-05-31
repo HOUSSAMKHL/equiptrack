@@ -30,7 +30,7 @@ class EquipementIdentifie extends Model
     }
 
 
-    public function efp()
+    public function etablissement()
     {
         return $this->belongsTo(Efp::class, 'id_etablissement');
     }
