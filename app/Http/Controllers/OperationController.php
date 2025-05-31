@@ -17,12 +17,6 @@ class OperationController extends Controller
     {
         $validated = $request->validate([
             'nom_operation' => 'required|string|max:255',
-            'type' => 'required|string|max:255',
-            'equipement' => 'required|string|max:255',
-            'date' => 'required|date',
-            'duree' => 'required|string|max:255',
-            'intervenant' => 'required|string|max:255',
-            'statut' => 'required|string|max:255',
         ]);
 
         $operation = Operation::create($validated);
@@ -42,12 +36,6 @@ class OperationController extends Controller
     {
         $validated = $request->validate([
             'nom_operation' => 'required|string|max:255',
-            'type' => 'required|string|max:255',
-            'equipement' => 'required|string|max:255',
-            'date' => 'required|date',
-            'duree' => 'required|string|max:255',
-            'intervenant' => 'required|string|max:255',
-            'statut' => 'required|string|max:255',
         ]);
 
         $operation->update($validated);
