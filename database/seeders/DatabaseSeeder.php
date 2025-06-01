@@ -43,6 +43,7 @@ class DatabaseSeeder extends Seeder
         EffectuerSeeder::class, 
         ObservationSeeder::class,
         RapportSeeder::class,
+        AtelierUtilisateurSeeder::class,
     ]);
 
     // Check if the user already exists before creating

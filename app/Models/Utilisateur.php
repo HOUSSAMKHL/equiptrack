@@ -47,8 +47,8 @@ class Utilisateur extends Model
         return $this->belongsTo(Efp::class, 'id_etablissement');
     }
 
-    public function atelier()
-    {
-        return $this->belongsTo(Atelier::class, 'id_atelier');
-    }
+    public function ateliers()
+{
+    return $this->belongsToMany(Atelier::class, 'atelier_utilisateur');
+}
 }

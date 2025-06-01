@@ -5,47 +5,50 @@ namespace App\Http\Controllers;
 use App\Models\Utilisateur;
 use App\Models\Role;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash; // ✅ CORRECT
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
 class UtilisateurController extends Controller
 {
     public function index() {
-        $utilisateurs = Utilisateur::with('role')->get();
+        $utilisateurs = Utilisateur::with(['role', 'ateliers'])->get();
         return response()->json($utilisateurs, 200);
     }
 
-public function store(Request $request) {
-    $request->validate([
-        'nom_user' => 'required|string|max:255',
-        'age' => 'required|integer',
-        'telephone' => 'required|string|max:255',
-        'email' => 'required|email|max:255|unique:utilisateurs,email',
-        'adresse' => 'required|string|max:255',
-        'password' => 'required|string|min:5',
-        'id_roles' => 'required|exists:roles,id',
-        'id_DR' => 'nullable|exists:direction_regionales,id',
-        'id_complexe' => 'nullable|exists:complexes,id',
-        'id_etablissement' => 'nullable|exists:efps,id',
-        'id_atelier' => 'nullable|exists:ateliers,id',
-    ]);
+    public function store(Request $request) {
+        $request->validate([
+            'nom_user' => 'required|string|max:255',
+            'age' => 'required|integer',
+            'telephone' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:utilisateurs,email',
+            'adresse' => 'required|string|max:255',
+            'password' => 'required|string|min:5',
+            'id_roles' => 'required|exists:roles,id',
+            'id_DR' => 'nullable|exists:direction_regionales,id',
+            'id_complexe' => 'nullable|exists:complexes,id',
+            'id_etablissement' => 'nullable|exists:efps,id',
+            'ateliers' => 'nullable|array',
+            'ateliers.*' => 'exists:ateliers,id',
+        ]);
 
-    // Hasher dynamiquement le mot de passe donné
-    $data = $request->all();
-    $data['password'] = Hash::make($data['password']);
+        $data = $request->except('ateliers');
+        $data['password'] = Hash::make($data['password']);
 
+        $utilisateur = Utilisateur::create($data);
+        
+        // Sync ateliers if the user is a formateur
+        if ($request->has('ateliers') && $utilisateur->role->nom_role === 'Formateur') {
+            $utilisateur->ateliers()->sync($request->ateliers);
+        }
 
-    $utilisateur = Utilisateur::create($data);
-
-
-    return response()->json([
-        'message' => 'Utilisateur créé avec succès.',
-        'utilisateur' => $utilisateur
-    ], 201);
-}
+        return response()->json([
+            'message' => 'Utilisateur créé avec succès.',
+            'utilisateur' => $utilisateur->load('ateliers')
+        ], 201);
+    }
 
     public function show(Utilisateur $utilisateur) {
-        return response()->json($utilisateur, 200);
+        return response()->json($utilisateur->load(['role', 'ateliers']), 200);
     }
 
     public function update(Request $request, Utilisateur $utilisateur) {
@@ -53,92 +56,95 @@ public function store(Request $request) {
             'nom_user' => 'required|string|max:255',
             'age' => 'required|integer',
             'telephone' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'required|email|max:255|unique:utilisateurs,email,'.$utilisateur->id,
             'adresse' => 'required|string|max:255',
-            'password' => 'nullable|string|min:8',
+            'password' => 'nullable|string|min:5',
             'id_roles' => 'required|exists:roles,id',
+            'id_DR' => 'nullable|exists:direction_regionales,id',
+            'id_complexe' => 'nullable|exists:complexes,id',
+            'id_etablissement' => 'nullable|exists:efps,id',
+            'ateliers' => 'nullable|array',
+            'ateliers.*' => 'exists:ateliers,id',
         ]);
 
-        $data = $request->all();
-
-        if (!empty($data['password'])) {
-            // Hasher le mot de passe
-            $data['password'] = Hash::make($data['password']);
-        } else {
-            // Ne pas écraser le mot de passe existant si aucun nouveau mot de passe fourni
-            unset($data['password']);
+        $data = $request->except('ateliers', 'password');
+        
+        if (!empty($request->password)) {
+            $data['password'] = Hash::make($request->password);
         }
 
         $utilisateur->update($data);
+        
+        // Sync ateliers if the user is a formateur
+        if ($request->has('ateliers') && $utilisateur->role->nom_role === 'Formateur') {
+            $utilisateur->ateliers()->sync($request->ateliers);
+        } else {
+            // Clear ateliers if not a formateur
+            $utilisateur->ateliers()->detach();
+        }
 
         return response()->json([
             'message' => 'Utilisateur mis à jour avec succès.',
-            'utilisateur' => $utilisateur
+            'utilisateur' => $utilisateur->load('ateliers')
         ], 200);
     }
 
     public function destroy(Utilisateur $utilisateur) {
+        $utilisateur->ateliers()->detach();
         $utilisateur->delete();
         return response()->json([
             'message' => 'Utilisateur supprimé avec succès.'
         ], 204);
     }
-    public function toggleStatus($id)
-{
-    $utilisateur = Utilisateur::findOrFail($id);
-    
-    $utilisateur->status = $utilisateur->status === 'actif' ? 'inactif' : 'actif';
-    $utilisateur->save();
 
-    // Load relationships if needed
-    $utilisateur->load('role', 'directionRegionale', 'complexe', 'efp', 'atelier');
+    public function toggleStatus($id) {
+        $utilisateur = Utilisateur::findOrFail($id);
+        
+        $utilisateur->status = $utilisateur->status === 'actif' ? 'inactif' : 'actif';
+        $utilisateur->save();
 
-    return response()->json([
-        'message' => 'Statut utilisateur mis à jour avec succès.',
-        'utilisateur' => $utilisateur
-    ], 200);
-}
-    
+        $utilisateur->load('role', 'directionRegionale', 'complexe', 'efp', 'ateliers');
 
-// Register
-public function register(Request $request) {
-    $request->validate([
-        'nom_user' => 'required|string|max:255',
-        'age' => 'required|integer',
-        'telephone' => 'required|string|max:255',
-        'email' => 'required|email|unique:utilisateurs,email',
-        'adresse' => 'required|string|max:255',
-        'password' => 'required|string|min:8',
-        'id_roles' => 'required|exists:roles,id',
-    ]);
+        return response()->json([
+            'message' => 'Statut utilisateur mis à jour avec succès.',
+            'utilisateur' => $utilisateur
+        ], 200);
+    }
 
-    $data = $request->only([
-        'nom_user',
-        'age',
-        'telephone',
-        'email',
-        'adresse',
-        'id_roles'
-    ]);
+    public function register(Request $request) {
+        $request->validate([
+            'nom_user' => 'required|string|max:255',
+            'age' => 'required|integer',
+            'telephone' => 'required|string|max:255',
+            'email' => 'required|email|unique:utilisateurs,email',
+            'adresse' => 'required|string|max:255',
+            'password' => 'required|string|min:8',
+            'id_roles' => 'required|exists:roles,id',
+        ]);
 
-    $data['password'] = Hash::make($request->password);
+        $data = $request->only([
+            'nom_user',
+            'age',
+            'telephone',
+            'email',
+            'adresse',
+            'id_roles'
+        ]);
 
-    $utilisateur = Utilisateur::create($data);
+        $data['password'] = Hash::make($request->password);
 
-    // Générer le token
-    $token = $utilisateur->createToken('auth_token')->plainTextToken;
+        $utilisateur = Utilisateur::create($data);
 
-    return response()->json([
-        'message' => 'Inscription réussie.',
-        'utilisateur' => $utilisateur,
-        'token' => $token,
-    ], 201);
-}
+        $token = $utilisateur->createToken('auth_token')->plainTextToken;
 
+        return response()->json([
+            'message' => 'Inscription réussie.',
+            'utilisateur' => $utilisateur,
+            'token' => $token,
+        ], 201);
+    }
 
-// Login
-public function login(Request $request)
-{
+    public function login(Request $request) {
     $request->validate([
         'email' => 'required|email',
         'password' => 'required|string',
@@ -146,19 +152,17 @@ public function login(Request $request)
 
     $utilisateur = Utilisateur::where('email', $request->email)->first();
 
-    // Check if user exists, password is correct, and status is active
     if (!$utilisateur || !Hash::check($request->password, $utilisateur->password)) {
         return response()->json(['message' => 'Identifiants invalides.'], 401);
     }
 
-    // Check if user is active
     if ($utilisateur->status !== 'actif') {
         return response()->json([
             'message' => 'Votre compte est désactivé. Contactez l\'administrateur.'
         ], 403);
     }
 
-    $utilisateur->load('role');
+    $utilisateur->load('role', 'ateliers'); // Make sure this is included
 
     $token = $utilisateur->createToken('auth_token')->plainTextToken;
 
@@ -168,8 +172,4 @@ public function login(Request $request)
         'token' => $token,
     ]);
 }
-
-
-
-
 }

@@ -23,7 +23,6 @@ return new class extends Migration
             $table->foreignId('id_DR')->nullable()->constrained('direction_regionales')->onDelete('cascade')->nullable();
             $table->foreignId('id_complexe')->nullable()->constrained('complexes')->onDelete('cascade')->nullable();
             $table->foreignId('id_etablissement')->nullable()->constrained('efps')->onDelete('cascade')->nullable();
-            $table->foreignId('id_atelier')->nullable()->constrained('ateliers')->onDelete('cascade')->nullable();
             $table->string('status')->default('actif');
         });
         

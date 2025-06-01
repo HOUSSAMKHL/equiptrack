@@ -25,4 +25,8 @@ class Atelier extends Model
     {
         return $this->belongsTo(Efp::class, 'id_etablissement');
     }
+    public function formateurs()
+{
+    return $this->belongsToMany(Utilisateur::class, 'atelier_utilisateur');
+}
 }

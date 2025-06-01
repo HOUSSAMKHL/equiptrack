@@ -22,7 +22,6 @@ class UtilisateurSeeder extends Seeder
         'id_DR' => 1,
         'id_complexe' => null,
         'id_etablissement' => null,
-        'id_atelier' => null,
     ],
     [
         'nom_user' => 'jalal', 
@@ -35,7 +34,6 @@ class UtilisateurSeeder extends Seeder
         'id_DR' => 1,
         'id_complexe' => 1,
         'id_etablissement' => null,
-        'id_atelier' => null,
     ],
     [
         'nom_user' => 'houssam', 
@@ -48,7 +46,6 @@ class UtilisateurSeeder extends Seeder
         'id_DR' => 1,
         'id_complexe' => 1,
         'id_etablissement' => 1,
-        'id_atelier' => null,
     ],
     [
         'nom_user' => 'omar', 
@@ -61,7 +58,6 @@ class UtilisateurSeeder extends Seeder
         'id_DR' => 1,
         'id_complexe' => 1,
         'id_etablissement' => 1,
-        'id_atelier' => 1
     ],
 ]);
 
