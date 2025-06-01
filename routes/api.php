@@ -34,6 +34,8 @@ Route::apiResource('anomalies', AnomalieController::class)->parameters([
     'anomalies' => 'anomalie'
 ]);
 Route::apiResource('utilisateurs', UtilisateurController::class);
+// api.php
+Route::patch('/utilisateurs/{id}/toggle-status', [UtilisateurController::class, 'toggleStatus']);
 Route::apiResource('roles', RoleController::class);
 Route::apiResource('frequences', FrequenceController::class);
 Route::apiResource('operations', OperationController::class);

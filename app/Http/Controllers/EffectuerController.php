@@ -7,6 +7,7 @@ use App\Models\Operation;
 use Illuminate\Http\Request;
 use App\Models\Utilisateur;
 use App\Models\EquipementTracable;
+use App\Models\Frequence;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
@@ -19,7 +20,8 @@ class EffectuerController extends Controller
         $effectuers = Effectuer::with([
             'utilisateur',
             'equipementTracable.equipementIdentifie',
-            'operation'
+            'operation',
+            'frequence'
         ])->get();
 
         return response()->json($effectuers, 200);
@@ -31,28 +33,22 @@ class EffectuerController extends Controller
             'id_user' => 'required|exists:utilisateurs,id',
             'id_exemplaire' => 'required|exists:equipement_tracables,id',
             'id_operation' => 'required|exists:operations,id',
+            'id_frequence' => 'nullable|exists:frequences,id',
             'date_operation' => 'required|date',
-            'durée' => 'required|numeric|min:0', // Changed to accept decimal hours
+            'durée' => 'required|numeric|min:0',
             'statut' => 'required|in:planned,in progress,completed',
         ]);
 
         try {
             DB::beginTransaction();
 
-            $effectuer = Effectuer::create([
-                'id_user' => $validated['id_user'],
-                'id_exemplaire' => $validated['id_exemplaire'],
-                'id_operation' => $validated['id_operation'],
-                'date_operation' => $validated['date_operation'],
-                'durée' => $validated['durée'], // Store directly as hours
-                'statut' => $validated['statut'],
-            ]);
+            $effectuer = Effectuer::create($validated);
 
             DB::commit();
 
             return response()->json([
                 'message' => 'Opération effectuée avec succès.',
-                'effectuer' => $effectuer->load(['utilisateur', 'equipementTracable', 'operation']),
+                'effectuer' => $effectuer->load(['utilisateur', 'equipementTracable', 'operation', 'frequence']),
             ], 201);
 
         } catch (\Exception $e) {
@@ -70,7 +66,8 @@ class EffectuerController extends Controller
         $effectuer->load([
             'utilisateur',
             'equipementTracable.equipementIdentifie',
-            'operation'
+            'operation',
+            'frequence'
         ]);
 
         return response()->json($effectuer, 200);
@@ -85,16 +82,11 @@ class EffectuerController extends Controller
                 'id_user' => 'required|exists:utilisateurs,id',
                 'id_exemplaire' => 'required|exists:equipement_tracables,id',
                 'id_operation' => 'required|exists:operations,id',
+                'id_frequence' => 'nullable|exists:frequences,id',
                 'date_operation' => 'required|date',
-                'durée' => 'required|integer|min:0', // Changed to accept decimal hours
+                'durée' => 'required|integer|min:0',
                 'statut' => 'required|in:planned,in progress,completed',
             ]);
-
-            if ($request->has('equipement_tracable.id_frequence')) {
-                $equipement = EquipementTracable::find($request->input('id_exemplaire'));
-                $equipement->id_frequence = $request->input('equipement_tracable.id_frequence');
-                $equipement->save();
-            }
 
             DB::beginTransaction();
             
@@ -104,7 +96,7 @@ class EffectuerController extends Controller
 
             return response()->json([
                 'message' => 'Operation updated successfully',
-                'data' => $effectuer->fresh()->load(['utilisateur', 'equipementTracable', 'operation'])
+                'data' => $effectuer->fresh()->load(['utilisateur', 'equipementTracable', 'operation', 'frequence'])
             ], 200);
 
         } catch (ValidationException $e) {

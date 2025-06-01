@@ -16,6 +16,7 @@ class Effectuer extends Model
         'id_user',
         'id_exemplaire',
         'id_operation',
+        'id_frequence',
         'date_operation',
         'durée',
         'statut',
@@ -26,15 +27,19 @@ class Effectuer extends Model
     {
         return $this->belongsTo(Utilisateur::class , 'id_user');
     }
-    
+
     public function equipementTracable()
     {
         return $this->belongsTo(EquipementTracable::class , 'id_exemplaire');
     }
-    
+
     public function operation()
     {
         return $this->belongsTo(Operation::class , 'id_operation');
     }
-    
+     public function frequence()
+    {
+        return $this->belongsTo(Frequence::class, 'id_frequence');
+    }
+
 }

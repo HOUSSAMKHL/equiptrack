@@ -19,4 +19,8 @@ class Frequence extends Model
 {
     return $this->hasMany(EquipementTracable::class, 'id_frequence');
 }
+public function effectuers()
+    {
+        return $this->hasMany(Effectuer::class, 'id_frequence');
+    }
 }

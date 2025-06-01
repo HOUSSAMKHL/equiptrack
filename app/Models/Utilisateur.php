@@ -24,6 +24,7 @@ class Utilisateur extends Model
         'id_complexe',
         'id_etablissement',
         'id_atelier',
+        'status'
     ];
 
     public function role()

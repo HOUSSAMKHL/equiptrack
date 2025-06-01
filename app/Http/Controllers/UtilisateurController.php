@@ -83,6 +83,21 @@ public function store(Request $request) {
             'message' => 'Utilisateur supprimé avec succès.'
         ], 204);
     }
+    public function toggleStatus($id)
+{
+    $utilisateur = Utilisateur::findOrFail($id);
+    
+    $utilisateur->status = $utilisateur->status === 'actif' ? 'inactif' : 'actif';
+    $utilisateur->save();
+
+    // Load relationships if needed
+    $utilisateur->load('role', 'directionRegionale', 'complexe', 'efp', 'atelier');
+
+    return response()->json([
+        'message' => 'Statut utilisateur mis à jour avec succès.',
+        'utilisateur' => $utilisateur
+    ], 200);
+}
     
 
 // Register
@@ -122,7 +137,8 @@ public function register(Request $request) {
 
 
 // Login
-public function login(Request $request) {
+public function login(Request $request)
+{
     $request->validate([
         'email' => 'required|email',
         'password' => 'required|string',
@@ -130,8 +146,16 @@ public function login(Request $request) {
 
     $utilisateur = Utilisateur::where('email', $request->email)->first();
 
+    // Check if user exists, password is correct, and status is active
     if (!$utilisateur || !Hash::check($request->password, $utilisateur->password)) {
         return response()->json(['message' => 'Identifiants invalides.'], 401);
+    }
+
+    // Check if user is active
+    if ($utilisateur->status !== 'actif') {
+        return response()->json([
+            'message' => 'Votre compte est désactivé. Contactez l\'administrateur.'
+        ], 403);
     }
 
     $utilisateur->load('role');
