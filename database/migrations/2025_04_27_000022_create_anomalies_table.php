@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('status')->default('open');
             $table->string('priorite')->default('low');
             $table->foreignId('id_user')->constrained('utilisateurs')->onDelete('cascade');
-            $table->foreignId('id_intervenant')->constrained('intervenants')->onDelete('cascade');
+            $table->foreignId('id_intervenant')->nullable()->constrained('intervenants')->onDelete('cascade');
             $table->foreignId('id_equipement')->constrained('equipement_tracables')->onDelete('cascade');
         });
         
