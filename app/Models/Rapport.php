@@ -24,4 +24,24 @@ class Rapport extends Model
     {
         return $this->belongsTo(Utilisateur::class, 'id_user');
     }
+    // Dans Rapport.php
+public function directionRegionale()
+{
+    return $this->belongsTo(DirectionRegionale::class, 'id_DR');
+}
+
+public function complexe()
+{
+    return $this->belongsTo(Complexe::class, 'id_complexe');
+}
+
+public function etablissement()
+{
+    return $this->belongsTo(Efp::class, 'id_etablissement');
+}
+
+public function atelier()
+{
+    return $this->belongsTo(Atelier::class, 'id_atelier');
+}
 }
