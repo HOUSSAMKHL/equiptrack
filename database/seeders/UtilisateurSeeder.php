@@ -12,6 +12,18 @@ class UtilisateurSeeder extends Seeder
     {
        DB::table('utilisateurs')->insert([
     [
+        'nom_user' => 'admin', 
+        'age' => 22, 
+        'telephone' => '0612345678', 
+        'email' => 'admin@efp.com', 
+        'adresse' => 'Casablanca', 
+        'password' => Hash::make('12345'), 
+        'id_roles' => 5,
+        'id_DR' => null,
+        'id_complexe' => null,
+        'id_etablissement' => null,
+    ],
+    [
         'nom_user' => 'oussama', 
         'age' => 22, 
         'telephone' => '0612345678', 
