@@ -47,28 +47,37 @@ $equipement = EquipementTracable::with(['atelier', 'equipementIdentifie', 'frequ
         return response()->json($equipement, 200);
     }
 
-    public function update(Request $request, EquipementTracable $equipementTracable) {
-        $validated = $request->validate([
-            'statut' => 'required|string|in:Opérationnel,En maintenance,Hors service',
-            'reference' => 'required|string|max:255',
-            'annee_dacquisition' => 'required|date_format:Y',
-            'valeur_dacquisition' => 'required|numeric',
-            'id_atelier' => 'required|exists:ateliers,id',
-            'id_equipement' => 'required|exists:equipement_identifies,id',
-            'id_frequence' => 'nullable|exists:frequences,id',
-        ]);
+    // In EquipementTracableController.php
+public function update(Request $request, EquipementTracable $equipementTracable) {
+    $validated = $request->validate([
+        'statut' => 'required|string|in:Opérationnel,En maintenance,Hors service',
+        'reference' => 'required|string|max:255',
+        'annee_dacquisition' => 'required|date_format:Y',
+        'valeur_dacquisition' => 'required|numeric',
+        'id_atelier' => 'required|exists:ateliers,id',
+        'id_equipement' => 'required|exists:equipement_identifies,id',
+        'id_frequence' => 'nullable|exists:frequences,id',
+    ]);
 
-        $equipementTracable->update($validated);
-        return response()->json([
-            'message' => 'Équipement tracable mis à jour',
-            'equipement' => $equipementTracable
-        ], 200);
+    $equipementTracable->update($validated);
+    
+    // If setting to "Hors service", create or update an anomaly
+    if ($validated['statut'] === 'Hors service') {
+        Anomalie::updateOrCreate(
+            ['id_equipement' => $equipementTracable->id, 'status' => 'Non résolu'],
+            [
+                'cause_anomalie' => 'Défaillance signalée',
+                'date_signalement' => now(),
+                'priorite' => 'high',
+                'status' => 'Non résolu',
+                'id_user' => auth()->id()
+            ]
+        );
     }
 
-    public function destroy(EquipementTracable $equipementTracable) {
-        $equipementTracable->delete();
-        return response()->json([
-            'message' => 'Équipement supprimé'
-        ], 204);
-    }
+    return response()->json([
+        'message' => 'Équipement tracable mis à jour',
+        'equipement' => $equipementTracable
+    ], 200);
+}
 }
