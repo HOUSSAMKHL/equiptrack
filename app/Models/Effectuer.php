@@ -41,5 +41,18 @@ class Effectuer extends Model
     {
         return $this->belongsTo(Frequence::class, 'id_frequence');
     }
-
+public static function updateStatuses()
+    {
+        $today = Carbon::today()->toDateString();
+        
+        // Update past due operations to "completed"
+        self::where('date_operation', '<', $today)
+            ->where('statut', '!=', 'completed')
+            ->update(['statut' => 'completed']);
+            
+        // Update today's operations to "in progress"
+        self::where('date_operation', $today)
+            ->where('statut', '!=', 'in progress')
+            ->update(['statut' => 'in progress']);
+    }
 }
