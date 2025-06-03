@@ -41,7 +41,6 @@ class DatabaseSeeder extends Seeder
         OperationSeeder::class,
         IntervenantSeeder::class, 
         EffectuerSeeder::class, 
-        ObservationSeeder::class,
         RapportSeeder::class,
         AtelierUtilisateurSeeder::class,
     ]);

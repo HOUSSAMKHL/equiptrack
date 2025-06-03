@@ -14,6 +14,7 @@ return new class extends Migration
     $table->foreignId('id_frequence')->nullable()->constrained('frequences')->onDelete('cascade');
     $table->date('date_operation');$table->integer('durée');
     $table->enum('statut', ['planned', 'in progress','completed'])->default('planned');
+    $table->text('description');
 });
 }
 

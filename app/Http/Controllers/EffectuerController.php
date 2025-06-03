@@ -37,6 +37,7 @@ class EffectuerController extends Controller
             'date_operation' => 'required|date',
             'durée' => 'required|numeric|min:0',
             'statut' => 'required|in:planned,in progress,completed',
+            'description' => 'nullable|string',
         ]);
 
         try {
@@ -86,6 +87,7 @@ class EffectuerController extends Controller
                 'date_operation' => 'required|date',
                 'durée' => 'required|integer|min:0',
                 'statut' => 'required|in:planned,in progress,completed',
+                'description' => 'nullable|string',
             ]);
 
             DB::beginTransaction();

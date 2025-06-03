@@ -20,6 +20,7 @@ class Effectuer extends Model
         'date_operation',
         'durée',
         'statut',
+        'description',
     ];
 
 

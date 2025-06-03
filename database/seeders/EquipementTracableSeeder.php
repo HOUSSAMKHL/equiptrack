@@ -12,28 +12,28 @@ class EquipementTracableSeeder extends Seeder
         DB::table('equipement_tracables')->insert([
             [
                 'statut' => 'Opérationnel', 
-                'reference' => 'TRC-001', 
-                'annee_dacquisition' => 2021, 
-                'valeur_dacquisition' => 1500.00, 
+                'reference' => 'OFPPT-PC-2023-001', 
+                'annee_dacquisition' => 2023, 
+                'valeur_dacquisition' => 7500.00, 
                 'id_atelier' => 1, 
                 'id_equipement' => 1,
                 'id_frequence' => 1
             ],
             [
                 'statut' => 'En maintenance', 
-                'reference' => 'TRC-002', 
-                'annee_dacquisition' => 2020, 
-                'valeur_dacquisition' => 2000.00, 
+                'reference' => 'OFPPT-SRV-2022-005', 
+                'annee_dacquisition' => 2022, 
+                'valeur_dacquisition' => 25000.00, 
                 'id_atelier' => 2, 
                 'id_equipement' => 2,
                 'id_frequence' => 2
             ],
             [
                 'statut' => 'Hors service', 
-                'reference' => 'TRC-003', 
-                'annee_dacquisition' => 2022, 
-                'valeur_dacquisition' => 2500.00, 
-                'id_atelier' => 1, 
+                'reference' => 'OFPPT-SW-2020-012', 
+                'annee_dacquisition' => 2020, 
+                'valeur_dacquisition' => 15000.00, 
+                'id_atelier' => 2, 
                 'id_equipement' => 3,
                 'id_frequence' => 3
             ]
