@@ -4,47 +4,65 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\File;
 
 class EfpSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('efps')->insert([
-            [
-                'nom_etablissement' => 'ISTA El Hank',
-                'adresse' => 'El Hank, Casablanca',
-                'numero' => '0522223344',
-                'email' => 'ista_elhank@ofppt.ma',
-                'id_complexe' => 1
-            ],
-            [
-                'nom_etablissement' => 'ISTA NTIC Casablanca',
-                'adresse' => 'Boulevard Moulay Youssef, Casablanca',
-                'numero' => '0522294545',
-                'email' => 'ista_ntic_casa@ofppt.ma',
-                'id_complexe' => 1
-            ],
-            [
-                'nom_etablissement' => 'ISTA Hay Hassani',
-                'adresse' => 'Hay Hassani, Casablanca',
-                'numero' => '0522364545',
-                'email' => 'ista_hayhassani@ofppt.ma',
-                'id_complexe' => 1
-            ],
-            [
-                'nom_etablissement' => 'ISTA NTIC Rabat',
-                'adresse' => 'Avenue Mohammed VI, Rabat',
-                'numero' => '0537724545',
-                'email' => 'ista_ntic_rabat@ofppt.ma',
-                'id_complexe' => 2
-            ],
-            [
-                'nom_etablissement' => 'ISTA Marrakech',
-                'adresse' => 'Route de Safi, Marrakech',
-                'numero' => '0524434545',
-                'email' => 'ista_marrakech@ofppt.ma',
-                'id_complexe' => 3
-            ],
-        ]);
+        $filePath = database_path('seeders/data/efps.xlsx');
+        
+        if (!File::exists($filePath)) {
+            $this->command->warn("Excel file not found at: $filePath");
+            return;
+        }
+
+        $spreadsheet = IOFactory::load($filePath);
+        $worksheet = $spreadsheet->getActiveSheet();
+
+        $highestRow = $worksheet->getHighestRow();
+        $highestColumn = $worksheet->getHighestColumn();
+
+        $headers = [];
+        $headerRow = $worksheet->getRowIterator(1, 1)->current();
+        $cellIterator = $headerRow->getCellIterator();
+        $cellIterator->setIterateOnlyExistingCells(false);
+        
+        foreach ($cellIterator as $cell) {
+            $headers[] = trim($cell->getValue());
+        }
+
+        $rows = [];
+        
+        for ($row = 2; $row <= $highestRow; $row++) {
+            $rowData = [];
+            $isEmptyRow = true;
+            
+            foreach ($headers as $col => $headerName) {
+                $columnLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col + 1);
+                $cell = $worksheet->getCell($columnLetter . $row);
+                $cellValue = $cell->getValue();
+                
+                $rowData[$headerName] = $cellValue;
+                
+                if ($cellValue !== null && $cellValue !== '') {
+                    $isEmptyRow = false;
+                }
+            }
+            
+            if ($isEmptyRow) {
+                continue;
+            }
+            
+            if (empty($rowData['nom_etablissement'])) {
+                continue;
+            }
+
+            $rows[] = $rowData;
+        }
+
+        DB::table('efps')->insert($rows);
+        $this->command->info(count($rows) . " efps inserted successfully.");
     }
 }

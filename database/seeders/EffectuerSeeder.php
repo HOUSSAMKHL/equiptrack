@@ -4,15 +4,65 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\File;
 
 class EffectuerSeeder extends Seeder
 {
     public function run(): void
-{
-    DB::table('effectuer')->insert([
-        ['id_user' => 1, 'id_exemplaire' => 1, 'id_operation' => 1,'id_frequence' => 1 ,'date_operation' => '2023-04-27', 'durée' => '02', 'statut' => 'completed','description' => 'Description for observation 1',],
-        ['id_user' => 2, 'id_exemplaire' => 2, 'id_operation' => 2, 'id_frequence' => 2,'date_operation' => '2023-04-28', 'durée' => '03', 'statut' => 'in progress','description' => 'Description for observation 2',],
-        ['id_user' => 3, 'id_exemplaire' => 3, 'id_operation' => 3,'id_frequence' => 1, 'date_operation' => '2023-04-29', 'durée' => '01', 'statut' => 'planned','description' => 'Description for observation 3',],
-    ]);
-}
+    {
+        $filePath = database_path('seeders/data/effectuer.xlsx');
+        
+        if (!File::exists($filePath)) {
+            $this->command->warn("Excel file not found at: $filePath");
+            return;
+        }
+
+        $spreadsheet = IOFactory::load($filePath);
+        $worksheet = $spreadsheet->getActiveSheet();
+
+        $highestRow = $worksheet->getHighestRow();
+        $highestColumn = $worksheet->getHighestColumn();
+
+        $headers = [];
+        $headerRow = $worksheet->getRowIterator(1, 1)->current();
+        $cellIterator = $headerRow->getCellIterator();
+        $cellIterator->setIterateOnlyExistingCells(false);
+        
+        foreach ($cellIterator as $cell) {
+            $headers[] = trim($cell->getValue());
+        }
+
+        $rows = [];
+        
+        for ($row = 2; $row <= $highestRow; $row++) {
+            $rowData = [];
+            $isEmptyRow = true;
+            
+            foreach ($headers as $col => $headerName) {
+                $columnLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col + 1);
+                $cell = $worksheet->getCell($columnLetter . $row);
+                $cellValue = $cell->getValue();
+                
+                $rowData[$headerName] = $cellValue;
+                
+                if ($cellValue !== null && $cellValue !== '') {
+                    $isEmptyRow = false;
+                }
+            }
+            
+            if ($isEmptyRow) {
+                continue;
+            }
+            
+            if (empty($rowData['id_user'])) {
+                continue;
+            }
+
+            $rows[] = $rowData;
+        }
+
+        DB::table('effectuer')->insert($rows);
+        $this->command->info(count($rows) . " effectuer records inserted successfully.");
+    }
 }

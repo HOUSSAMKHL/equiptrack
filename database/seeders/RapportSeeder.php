@@ -4,55 +4,80 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Rapport;
-use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Carbon;
 
 class RapportSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $rapports = [
-            [
-                'titre' => 'Rapport annuel 2023',
-                'date_de_generation' => Carbon::now()->subDays(10),
-                'statut' => 'Terminé',
-                'id_user' => 1,
-                'fichier_path' => 'rapports/fichier_annuel_2023.pdf'
-            ],
-            [
-                'titre' => 'Analyse des ventes Q1',
-                'date_de_generation' => Carbon::now()->subDays(25),
-                'statut' => 'Validé',
-                'id_user' => 2,
-                'fichier_path' => 'rapports/ventes_q1.pdf'
-            ],
-            [
-                'titre' => 'Audit sécurité',
-                'date_de_generation' => Carbon::now()->subDays(5),
-                'statut' => 'En cours',
-                'id_user' => 1,
-                'fichier_path' => 'rapports/audit_securite.pdf'
-            ],
-            [
-                'titre' => 'Rapport mensuel - Mars',
-                'date_de_generation' => Carbon::now()->subDays(15),
-                'statut' => 'Terminé',
-                'id_user' => 3,
-                'fichier_path' => 'rapports/mensuel_mars.pdf'
-            ],
-            [
-                'titre' => 'Analyse marché',
-                'date_de_generation' => Carbon::now()->subDays(3),
-                'statut' => 'Brouillon',
-                'id_user' => 2,
-                'fichier_path' => 'rapports/analyse_marche.pdf'
-            ]
-        ];
+        $filePath = database_path('seeders/data/rapports.xlsx');
 
-        foreach ($rapports as $rapport) {
+        if (!File::exists($filePath)) {
+            $this->command->warn("Excel file not found at: $filePath");
+            return;
+        }
+
+        $this->command->info("Loading Excel file: $filePath");
+
+        $spreadsheet = IOFactory::load($filePath);
+        $worksheet = $spreadsheet->getActiveSheet();
+        $highestRow = $worksheet->getHighestRow();
+
+        // Extract headers
+        $headers = [];
+        foreach ($worksheet->getRowIterator(1, 1)->current()->getCellIterator() as $cell) {
+            $headers[] = trim($cell->getValue());
+        }
+
+        $this->command->info("Headers found: " . implode(", ", $headers));
+
+        $rows = [];
+
+        for ($row = 2; $row <= $highestRow; $row++) {
+            $rowData = [];
+            $isEmptyRow = true;
+
+            foreach ($headers as $col => $header) {
+                $columnLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col + 1);
+                $cell = $worksheet->getCell($columnLetter . $row);
+                $value = $cell->getValue();
+
+                // Format dates if necessary
+                if ($header === 'date_de_generation' && !empty($value)) {
+                    $value = Carbon::parse($value);
+                }
+
+                $rowData[$header] = $value;
+
+                if (!empty($value)) {
+                    $isEmptyRow = false;
+                }
+            }
+
+            if ($isEmptyRow) {
+                $this->command->warn("Row $row is empty, skipping...");
+                continue;
+            }
+
+            if (empty($rowData['titre'])) {
+                $this->command->warn("Row $row skipped: 'titre' is missing.");
+                continue;
+            }
+
+            $rows[] = $rowData;
+        }
+
+        if (empty($rows)) {
+            $this->command->warn("No valid data found.");
+            return;
+        }
+
+        foreach ($rows as $rapport) {
             Rapport::create($rapport);
         }
+
+        $this->command->info(count($rows) . " rapports inserted successfully.");
     }
 }

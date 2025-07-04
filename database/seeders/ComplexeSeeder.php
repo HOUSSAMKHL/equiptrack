@@ -4,40 +4,65 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Carbon;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\File;
 
 class ComplexeSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('complexes')->insert([
-            [
-                'nom_complexe' => 'Complexe Hassan II - Casablanca',
-                'ville' => 'Casablanca',
-                'adresse' => 'Boulevard Moulay Youssef',
-                'description' => 'Principal complexe de formation à Casablanca',
-                'id_DR' => 1,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'nom_complexe' => 'Complexe Mohammed VI - Rabat',
-                'ville' => 'Rabat',
-                'adresse' => 'Avenue Mohammed VI',
-                'description' => 'Principal complexe de formation à Rabat',
-                'id_DR' => 2,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'nom_complexe' => 'Complexe Al Qods - Marrakech',
-                'ville' => 'Marrakech',
-                'adresse' => 'Route de Safi',
-                'description' => 'Principal complexe de formation à Marrakech',
-                'id_DR' => 3,
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-        ]);
+        $filePath = database_path('seeders/data/complexes.xlsx');
+        
+        if (!File::exists($filePath)) {
+            $this->command->warn("Excel file not found at: $filePath");
+            return;
+        }
+
+        $spreadsheet = IOFactory::load($filePath);
+        $worksheet = $spreadsheet->getActiveSheet();
+
+        $highestRow = $worksheet->getHighestRow();
+        $highestColumn = $worksheet->getHighestColumn();
+
+        $headers = [];
+        $headerRow = $worksheet->getRowIterator(1, 1)->current();
+        $cellIterator = $headerRow->getCellIterator();
+        $cellIterator->setIterateOnlyExistingCells(false);
+        
+        foreach ($cellIterator as $cell) {
+            $headers[] = trim($cell->getValue());
+        }
+
+        $rows = [];
+        
+        for ($row = 2; $row <= $highestRow; $row++) {
+            $rowData = [];
+            $isEmptyRow = true;
+            
+            foreach ($headers as $col => $headerName) {
+                $columnLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col + 1);
+                $cell = $worksheet->getCell($columnLetter . $row);
+                $cellValue = $cell->getValue();
+                
+                $rowData[$headerName] = $cellValue;
+                
+                if ($cellValue !== null && $cellValue !== '') {
+                    $isEmptyRow = false;
+                }
+            }
+            
+            if ($isEmptyRow) {
+                continue;
+            }
+            
+            if (empty($rowData['nom_complexe'])) {
+                continue;
+            }
+
+            $rows[] = $rowData;
+        }
+
+        DB::table('complexes')->insert($rows);
+        $this->command->info(count($rows) . " complexes inserted successfully.");
     }
 }

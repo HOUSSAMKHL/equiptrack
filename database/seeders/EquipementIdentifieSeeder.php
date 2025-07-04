@@ -4,17 +4,80 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\File;
 
 class EquipementIdentifieSeeder extends Seeder
 {
     public function run(): void
-{
-    DB::table('equipement_identifies')->insert([
-        ['nom_equipement' => 'Compresseur X100', 'secteur' => 'Mécanique', 'id_categorie' => 1,'id_etablissement' => 1 , 'quantite' => 2],
-        ['nom_equipement' => 'Générateur Y200', 'secteur' => 'Électrique', 'id_categorie' => 1,'id_etablissement' => 1, 'quantite' => 1],
-        ['nom_equipement' => 'Presse Z300', 'secteur' => 'Hydraulique', 'id_categorie' => 2,'id_etablissement' => 2, 'quantite' => 3],
-        ['nom_equipement' => 'Scie A400', 'secteur' => 'Découpe', 'id_categorie' => 3,'id_etablissement' => 2, 'quantite' => 4],
-        ['nom_equipement' => 'Tour B500', 'secteur' => 'Usinage', 'id_categorie' => 4,'id_etablissement' => 3, 'quantite' => 5],
-    ]);
-}
+    {
+        $filePath = database_path('seeders/data/equipement_identifies.xlsx');
+
+        if (!File::exists($filePath)) {
+            $this->command->warn("Excel file not found at: $filePath");
+            return;
+        }
+
+        $this->command->info("Loading Excel file: $filePath");
+
+        $spreadsheet = IOFactory::load($filePath);
+        $worksheet = $spreadsheet->getActiveSheet();
+        $highestRow = $worksheet->getHighestRow();
+
+        // Extract headers
+        $headers = [];
+        $headerRow = $worksheet->getRowIterator(1, 1)->current();
+        $cellIterator = $headerRow->getCellIterator();
+        $cellIterator->setIterateOnlyExistingCells(false);
+
+        foreach ($cellIterator as $cell) {
+            $headers[] = trim($cell->getValue());
+        }
+
+        $this->command->info("Headers found: " . implode(", ", $headers));
+
+        $rows = [];
+
+        for ($row = 2; $row <= $highestRow; $row++) {
+            $rowData = [];
+            $isEmptyRow = true;
+
+            foreach ($headers as $col => $headerName) {
+                $columnLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col + 1);
+                $cell = $worksheet->getCell($columnLetter . $row);
+                $cellValue = $cell->getValue();
+
+                // Cast numeric fields
+                if (in_array($headerName, ['id_categorie', 'id_etablissement', 'quantite'])) {
+                    $cellValue = is_numeric($cellValue) ? $cellValue : null;
+                }
+
+                $rowData[$headerName] = $cellValue;
+
+                if (!empty($cellValue) || $cellValue === 0 || $cellValue === '0') {
+                    $isEmptyRow = false;
+                }
+            }
+
+            if ($isEmptyRow) {
+                $this->command->warn("Row $row is empty, skipping...");
+                continue;
+            }
+
+            if (empty($rowData['nom_equipement'])) {
+                $this->command->warn("Row $row skipped: 'nom_equipement' is missing or empty.");
+                continue;
+            }
+
+            $rows[] = $rowData;
+        }
+
+        if (empty($rows)) {
+            $this->command->warn("No valid data found in Excel.");
+            return;
+        }
+
+        DB::table('equipement_identifies')->insert($rows);
+        $this->command->info(count($rows) . " équipements identifiés inserted successfully.");
+    }
 }

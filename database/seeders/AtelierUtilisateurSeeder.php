@@ -4,14 +4,61 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\File;
 
 class AtelierUtilisateurSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('atelier_utilisateur')->insert([
-            ['utilisateur_id' => 4, 'atelier_id' => 1], // omar is assigned to Atelier 1
-            ['utilisateur_id' => 4, 'atelier_id' => 2], // omar is also assigned to Atelier 2
-        ]);
+        $filePath = database_path('seeders/data/atelier_utilisateur.xlsx');
+        
+        if (!File::exists($filePath)) {
+            $this->command->warn("Excel file not found at: $filePath");
+            return;
+        }
+
+        $spreadsheet = IOFactory::load($filePath);
+        $worksheet = $spreadsheet->getActiveSheet();
+
+        $highestRow = $worksheet->getHighestRow();
+        $highestColumn = $worksheet->getHighestColumn();
+
+        $headers = [];
+        $headerRow = $worksheet->getRowIterator(1, 1)->current();
+        $cellIterator = $headerRow->getCellIterator();
+        $cellIterator->setIterateOnlyExistingCells(false);
+        
+        foreach ($cellIterator as $cell) {
+            $headers[] = trim($cell->getValue());
+        }
+
+        $rows = [];
+        
+        for ($row = 2; $row <= $highestRow; $row++) {
+            $rowData = [];
+            $isEmptyRow = true;
+            
+            foreach ($headers as $col => $headerName) {
+                $columnLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col + 1);
+                $cell = $worksheet->getCell($columnLetter . $row);
+                $cellValue = $cell->getValue();
+                
+                $rowData[$headerName] = $cellValue;
+                
+                if ($cellValue !== null && $cellValue !== '') {
+                    $isEmptyRow = false;
+                }
+            }
+            
+            if ($isEmptyRow) {
+                continue;
+            }
+            
+            $rows[] = $rowData;
+        }
+
+        DB::table('atelier_utilisateur')->insert($rows);
+        $this->command->info(count($rows) . " atelier_utilisateur records inserted successfully.");
     }
 }

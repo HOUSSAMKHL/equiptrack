@@ -4,39 +4,80 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\File;
 
 class EquipementTracableSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('equipement_tracables')->insert([
-            [
-                'statut' => 'Opérationnel', 
-                'reference' => 'OFPPT-PC-2023-001', 
-                'annee_dacquisition' => 2023, 
-                'valeur_dacquisition' => 7500.00, 
-                'id_atelier' => 1, 
-                'id_equipement' => 1,
-                'id_frequence' => 1
-            ],
-            [
-                'statut' => 'En maintenance', 
-                'reference' => 'OFPPT-SRV-2022-005', 
-                'annee_dacquisition' => 2022, 
-                'valeur_dacquisition' => 25000.00, 
-                'id_atelier' => 2, 
-                'id_equipement' => 2,
-                'id_frequence' => 2
-            ],
-            [
-                'statut' => 'Hors service', 
-                'reference' => 'OFPPT-SW-2020-012', 
-                'annee_dacquisition' => 2020, 
-                'valeur_dacquisition' => 15000.00, 
-                'id_atelier' => 2, 
-                'id_equipement' => 3,
-                'id_frequence' => 3
-            ]
-        ]);
+        $filePath = database_path('seeders/data/equipement_tracables.xlsx');
+
+        if (!File::exists($filePath)) {
+            $this->command->warn("Excel file not found at: $filePath");
+            return;
+        }
+
+        $this->command->info("Loading Excel file: $filePath");
+
+        $spreadsheet = IOFactory::load($filePath);
+        $worksheet = $spreadsheet->getActiveSheet();
+        $highestRow = $worksheet->getHighestRow();
+
+        // Extract headers
+        $headers = [];
+        $headerRow = $worksheet->getRowIterator(1, 1)->current();
+        $cellIterator = $headerRow->getCellIterator();
+        $cellIterator->setIterateOnlyExistingCells(false);
+
+        foreach ($cellIterator as $cell) {
+            $headers[] = trim($cell->getValue());
+        }
+
+        $this->command->info("Headers found: " . implode(", ", $headers));
+
+        $rows = [];
+
+        for ($row = 2; $row <= $highestRow; $row++) {
+            $rowData = [];
+            $isEmptyRow = true;
+
+            foreach ($headers as $col => $headerName) {
+                $columnLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col + 1);
+                $cell = $worksheet->getCell($columnLetter . $row);
+                $cellValue = $cell->getValue();
+
+                // Optionally cast numeric values
+                if (in_array($headerName, ['annee_dacquisition', 'valeur_dacquisition', 'id_atelier', 'id_equipement', 'id_frequence'])) {
+                    $cellValue = is_numeric($cellValue) ? $cellValue : null;
+                }
+
+                $rowData[$headerName] = $cellValue;
+
+                if (!empty($cellValue) || $cellValue === 0 || $cellValue === '0') {
+                    $isEmptyRow = false;
+                }
+            }
+
+            if ($isEmptyRow) {
+                $this->command->warn("Row $row is empty, skipping...");
+                continue;
+            }
+
+            if (empty($rowData['reference'])) {
+                $this->command->warn("Row $row skipped: 'reference' is missing or empty.");
+                continue;
+            }
+
+            $rows[] = $rowData;
+        }
+
+        if (empty($rows)) {
+            $this->command->warn("No valid data found in Excel.");
+            return;
+        }
+
+        DB::table('equipement_tracables')->insert($rows);
+        $this->command->info(count($rows) . " équipements traçables inserted successfully.");
     }
 }
